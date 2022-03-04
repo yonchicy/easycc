@@ -18,6 +18,9 @@ NProgram *program;
 
 %token <string> TIDENTIFIER TINTEGER 
 %token <token> TSEMICOLOM
+%token <token> TMAIN
+%token <token> TINT
+%token <token> TRETURN
 
 %type <expr> expression
 %type <type> type
@@ -32,13 +35,13 @@ program
     : function {programBlock = new NProgram(*$1);}
         ;
 function
-    : type TIDENTIFIER '(' ')' '{' statement '}' {$$=new NFunctionDeclaration(*$1,*$2,*$6);}
+    : type TMAIN '(' ')' '{' statement '}' {$$=new NFunctionDeclaration(*$1,std::string("main"),*$6);}
 ;
 type
-    : "int" {$$=new NType(std::string("int"));}
+    : TINT {$$=new NType(std::string("int"));}
 ;
 statement
-   : "return" expression ';'{$$ = new NReturnStatement(*$2);}
+   : TRETURN expression TSEMICOLOM {$$ = new NReturnStatement(*$2);}
 ;
 expression
     : TINTEGER {$$=new NInteger(atoi($1->c_str()));delete $1;}

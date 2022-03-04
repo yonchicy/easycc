@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_PARSER_HPP_INCLUDED
-# define YY_YY_PARSER_HPP_INCLUDED
+#ifndef YY_YY_SRC_FRONTEND_PARSER_HPP_INCLUDED
+# define YY_YY_SRC_FRONTEND_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -56,7 +56,10 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     TIDENTIFIER = 258,             /* TIDENTIFIER  */
     TINTEGER = 259,                /* TINTEGER  */
-    TSEMICOLOM = 260               /* TSEMICOLOM  */
+    TSEMICOLOM = 260,              /* TSEMICOLOM  */
+    TMAIN = 261,                   /* TMAIN  */
+    TINT = 262,                    /* TINT  */
+    TRETURN = 263                  /* TRETURN  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -65,7 +68,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 8 "parser.y"
+#line 8 "src/frontend/parser.y"
 
 NStatement *stmt;
 NExpression *expr;
@@ -76,7 +79,7 @@ int token;
 std::string *string;
 NProgram *program;
 
-#line 80 "parser.hpp"
+#line 83 "src/frontend/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -91,4 +94,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_PARSER_HPP_INCLUDED  */
+#endif /* !YY_YY_SRC_FRONTEND_PARSER_HPP_INCLUDED  */

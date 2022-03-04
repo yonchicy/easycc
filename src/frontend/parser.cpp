@@ -67,14 +67,14 @@
 
 
 /* First part of user prologue.  */
-#line 1 "parser.y"
+#line 1 "src/frontend/parser.y"
 
     #include "../../include/node.hpp"
     NProgram *programBlock;
     extern int yylex();
     void yyerror(const char*s){printf("ERROR:%s\n",s);}
 
-#line 78 "parser.cpp"
+#line 78 "src/frontend/parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -108,13 +108,13 @@ enum yysymbol_kind_t
   YYSYMBOL_TIDENTIFIER = 3,                /* TIDENTIFIER  */
   YYSYMBOL_TINTEGER = 4,                   /* TINTEGER  */
   YYSYMBOL_TSEMICOLOM = 5,                 /* TSEMICOLOM  */
-  YYSYMBOL_6_ = 6,                         /* '('  */
-  YYSYMBOL_7_ = 7,                         /* ')'  */
-  YYSYMBOL_8_ = 8,                         /* '{'  */
-  YYSYMBOL_9_ = 9,                         /* '}'  */
-  YYSYMBOL_10_int_ = 10,                   /* "int"  */
-  YYSYMBOL_11_return_ = 11,                /* "return"  */
-  YYSYMBOL_12_ = 12,                       /* ';'  */
+  YYSYMBOL_TMAIN = 6,                      /* TMAIN  */
+  YYSYMBOL_TINT = 7,                       /* TINT  */
+  YYSYMBOL_TRETURN = 8,                    /* TRETURN  */
+  YYSYMBOL_9_ = 9,                         /* '('  */
+  YYSYMBOL_10_ = 10,                       /* ')'  */
+  YYSYMBOL_11_ = 11,                       /* '{'  */
+  YYSYMBOL_12_ = 12,                       /* '}'  */
   YYSYMBOL_YYACCEPT = 13,                  /* $accept  */
   YYSYMBOL_program = 14,                   /* program  */
   YYSYMBOL_function = 15,                  /* function  */
@@ -448,7 +448,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   14
+#define YYLAST   11
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  13
@@ -460,7 +460,7 @@ union yyalloc
 #define YYNSTATES  16
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   262
+#define YYMAXUTOK   263
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -478,15 +478,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       6,     7,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    12,
+       9,    10,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     8,     2,     9,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,    11,     2,    12,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -500,14 +500,14 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,    10,    11
+       5,     6,     7,     8
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    32,    32,    35,    38,    41,    44
+       0,    35,    35,    38,    41,    44,    47
 };
 #endif
 
@@ -524,9 +524,9 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "TIDENTIFIER",
-  "TINTEGER", "TSEMICOLOM", "'('", "')'", "'{'", "'}'", "\"int\"",
-  "\"return\"", "';'", "$accept", "program", "function", "type",
-  "statement", "expression", YY_NULLPTR
+  "TINTEGER", "TSEMICOLOM", "TMAIN", "TINT", "TRETURN", "'('", "')'",
+  "'{'", "'}'", "$accept", "program", "function", "type", "statement",
+  "expression", YY_NULLPTR
 };
 
 static const char *
@@ -536,7 +536,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-11)
+#define YYPACT_NINF (-8)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -550,8 +550,8 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -10,   -11,     1,   -11,    -1,   -11,    -3,    -2,    -4,    -5,
-       3,     0,   -11,     2,   -11,   -11
+      -7,    -8,     1,    -8,    -4,    -8,    -6,    -5,    -3,    -2,
+       0,    -1,    -8,     2,    -8,    -8
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -566,7 +566,7 @@ static const yytype_int8 yydefact[] =
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -11,   -11,   -11,   -11,   -11,   -11
+      -8,    -8,    -8,    -8,    -8,    -8
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -580,22 +580,22 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,     5,     6,     7,     9,     8,    10,    12,     0,    14,
-       0,     0,     0,     0,    15
+       1,     5,     6,     7,    12,     8,    10,    15,     9,     0,
+       0,    14
 };
 
 static const yytype_int8 yycheck[] =
 {
-      10,     0,     3,     6,     8,     7,    11,     4,    -1,     9,
-      -1,    -1,    -1,    -1,    12
+       7,     0,     6,     9,     4,    10,     8,     5,    11,    -1,
+      -1,    12
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    10,    14,    15,    16,     0,     3,     6,     7,     8,
-      11,    17,     4,    18,     9,    12
+       0,     7,    14,    15,    16,     0,     6,     9,    10,    11,
+       8,    17,     4,    18,    12,     5
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
@@ -1071,37 +1071,37 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: function  */
-#line 32 "parser.y"
+#line 35 "src/frontend/parser.y"
                {programBlock = new NProgram(*(yyvsp[0].func_decl));}
-#line 1077 "parser.cpp"
+#line 1077 "src/frontend/parser.cpp"
     break;
 
-  case 3: /* function: type TIDENTIFIER '(' ')' '{' statement '}'  */
-#line 35 "parser.y"
-                                                 {(yyval.func_decl)=new NFunctionDeclaration(*(yyvsp[-6].type),*(yyvsp[-5].string),*(yyvsp[-1].stmt));}
-#line 1083 "parser.cpp"
+  case 3: /* function: type TMAIN '(' ')' '{' statement '}'  */
+#line 38 "src/frontend/parser.y"
+                                           {(yyval.func_decl)=new NFunctionDeclaration(*(yyvsp[-6].type),std::string("main"),*(yyvsp[-1].stmt));}
+#line 1083 "src/frontend/parser.cpp"
     break;
 
-  case 4: /* type: "int"  */
-#line 38 "parser.y"
-            {(yyval.type)=new NType(std::string("int"));}
-#line 1089 "parser.cpp"
+  case 4: /* type: TINT  */
+#line 41 "src/frontend/parser.y"
+           {(yyval.type)=new NType(std::string("int"));}
+#line 1089 "src/frontend/parser.cpp"
     break;
 
-  case 5: /* statement: "return" expression ';'  */
-#line 41 "parser.y"
-                            {(yyval.stmt) = new NReturnStatement(*(yyvsp[-1].expr));}
-#line 1095 "parser.cpp"
+  case 5: /* statement: TRETURN expression TSEMICOLOM  */
+#line 44 "src/frontend/parser.y"
+                                   {(yyval.stmt) = new NReturnStatement(*(yyvsp[-1].expr));}
+#line 1095 "src/frontend/parser.cpp"
     break;
 
   case 6: /* expression: TINTEGER  */
-#line 44 "parser.y"
+#line 47 "src/frontend/parser.y"
                {(yyval.expr)=new NInteger(atoi((yyvsp[0].string)->c_str()));delete (yyvsp[0].string);}
-#line 1101 "parser.cpp"
+#line 1101 "src/frontend/parser.cpp"
     break;
 
 
-#line 1105 "parser.cpp"
+#line 1105 "src/frontend/parser.cpp"
 
       default: break;
     }
@@ -1294,5 +1294,5 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 46 "parser.y"
+#line 49 "src/frontend/parser.y"
 

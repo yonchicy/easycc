@@ -6,12 +6,13 @@ CPPFLAGS := -std=c++17 -O2
 SOURCE := $(wildcard src/*.cpp src/frontend/*.cpp)
 OBJECTS :=$(patsubst %.cpp,build/%.o,$(notdir $(SOURCE)))
 DEPENDS :=$(patsubst %.o,%.d,$(OBJECTS))
-TAEGETS := easycc
+TAEGETS := build/easycc
 
 $(shell mkdir -p build)
 
 .PHONY:all
-all: $(TAEGETS)
+
+all: $(TAEGETS) scanner
 	@echo build finish
 
 $(TAEGETS) :$(OBJECTS)
