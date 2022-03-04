@@ -1,6 +1,6 @@
 %{
-    #include "../../include/node.h"
-    NFunctionDeclaration *programBlock;
+    #include "../../include/node.hpp"
+    NProgram *programBlock;
     extern int yylex();
     void yyerror(const char*s){printf("ERROR:%s\n",s);}
 %}
@@ -9,35 +9,38 @@
 NStatement *stmt;
 NExpression *expr;
 NIdentifier *ident;
+NFunctionDeclaration * func_decl;
 NType *type;
 int token;
 std::string *string;
+NProgram *program;
 }
 
-%token <string> TIDENTIFIER TINTEGER TTYPE
+%token <string> TIDENTIFIER TINTEGER 
 %token <token> TSEMICOLOM
 
-%type <ident> ident
-%type <epxr> expr
+%type <expr> expression
 %type <type> type
-%type <stmt> stmt func_decl
-%type <token> comparison
+%type <stmt> statement 
+%type <func_decl> function
+%type <program> program
 
 
 %start program
-
-program 
-    : function {programBlock = $1;}
+%%
+program
+    : function {programBlock = new NProgram(*$1);}
         ;
-function 
-    : type ident '(' ')' '{' stmt '}' {$$=new NFunctionDeclaration(*$1,*$2,*$6);}
-
-type 
-    : TTYPE {$$=new NType(*$1); delete $1;}
-
+function
+    : type TIDENTIFIER '(' ')' '{' statement '}' {$$=new NFunctionDeclaration(*$1,*$2,*$6);}
+;
+type
+    : "int" {$$=new NType(std::string("int"));}
+;
 statement
-    : 'return' expr ';' {}
-
-expr:
-    :TINTEGER {$$=new NInteger(atoi($1->c_str()));delete $1;}
-
+   : "return" expression ';'{$$ = new NReturnStatement(*$2);}
+;
+expression
+    : TINTEGER {$$=new NInteger(atoi($1->c_str()));delete $1;}
+    ;
+%%
