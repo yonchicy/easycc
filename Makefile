@@ -14,7 +14,8 @@ $(shell mkdir -p build)
 
 all: $(TAEGETS) scanner
 	@echo build finish
-
+run:all
+	./build/easycc
 $(TAEGETS) :$(OBJECTS)
 	$(CC) $(CPPFLAGS) -lm $^ -o $@
 

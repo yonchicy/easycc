@@ -111,10 +111,10 @@ enum yysymbol_kind_t
   YYSYMBOL_TMAIN = 6,                      /* TMAIN  */
   YYSYMBOL_TINT = 7,                       /* TINT  */
   YYSYMBOL_TRETURN = 8,                    /* TRETURN  */
-  YYSYMBOL_9_ = 9,                         /* '('  */
-  YYSYMBOL_10_ = 10,                       /* ')'  */
-  YYSYMBOL_11_ = 11,                       /* '{'  */
-  YYSYMBOL_12_ = 12,                       /* '}'  */
+  YYSYMBOL_TLPAREN = 9,                    /* TLPAREN  */
+  YYSYMBOL_TRPAREN = 10,                   /* TRPAREN  */
+  YYSYMBOL_TLBPAREN = 11,                  /* TLBPAREN  */
+  YYSYMBOL_TRBPAREN = 12,                  /* TRBPAREN  */
   YYSYMBOL_YYACCEPT = 13,                  /* $accept  */
   YYSYMBOL_program = 14,                   /* program  */
   YYSYMBOL_function = 15,                  /* function  */
@@ -460,7 +460,7 @@ union yyalloc
 #define YYNSTATES  16
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   263
+#define YYMAXUTOK   267
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -478,7 +478,6 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       9,    10,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -486,7 +485,8 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    11,     2,    12,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -500,7 +500,7 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8
+       5,     6,     7,     8,     9,    10,    11,    12
 };
 
 #if YYDEBUG
@@ -524,9 +524,9 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "TIDENTIFIER",
-  "TINTEGER", "TSEMICOLOM", "TMAIN", "TINT", "TRETURN", "'('", "')'",
-  "'{'", "'}'", "$accept", "program", "function", "type", "statement",
-  "expression", YY_NULLPTR
+  "TINTEGER", "TSEMICOLOM", "TMAIN", "TINT", "TRETURN", "TLPAREN",
+  "TRPAREN", "TLBPAREN", "TRBPAREN", "$accept", "program", "function",
+  "type", "statement", "expression", YY_NULLPTR
 };
 
 static const char *
@@ -1076,9 +1076,9 @@ yyreduce:
 #line 1077 "src/frontend/parser.cpp"
     break;
 
-  case 3: /* function: type TMAIN '(' ')' '{' statement '}'  */
+  case 3: /* function: type TMAIN TLPAREN TRPAREN TLBPAREN statement TRBPAREN  */
 #line 38 "src/frontend/parser.y"
-                                           {(yyval.func_decl)=new NFunctionDeclaration(*(yyvsp[-6].type),std::string("main"),*(yyvsp[-1].stmt));}
+                                                             {(yyval.func_decl)=new NFunctionDeclaration(*(yyvsp[-6].type),std::string("main"),*(yyvsp[-1].stmt));}
 #line 1083 "src/frontend/parser.cpp"
     break;
 
@@ -1096,7 +1096,7 @@ yyreduce:
 
   case 6: /* expression: TINTEGER  */
 #line 47 "src/frontend/parser.y"
-               {(yyval.expr)=new NInteger(atoi((yyvsp[0].string)->c_str()));delete (yyvsp[0].string);}
+               {std::cout<<"get expression\n";(yyval.expr)=new NInteger(atoi((yyvsp[0].string)->c_str()));delete (yyvsp[0].string);}
 #line 1101 "src/frontend/parser.cpp"
     break;
 

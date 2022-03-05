@@ -59,7 +59,11 @@ extern int yydebug;
     TSEMICOLOM = 260,              /* TSEMICOLOM  */
     TMAIN = 261,                   /* TMAIN  */
     TINT = 262,                    /* TINT  */
-    TRETURN = 263                  /* TRETURN  */
+    TRETURN = 263,                 /* TRETURN  */
+    TLPAREN = 264,                 /* TLPAREN  */
+    TRPAREN = 265,                 /* TRPAREN  */
+    TLBPAREN = 266,                /* TLBPAREN  */
+    TRBPAREN = 267                 /* TRBPAREN  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -79,7 +83,7 @@ int token;
 std::string *string;
 NProgram *program;
 
-#line 83 "src/frontend/parser.hpp"
+#line 87 "src/frontend/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;
