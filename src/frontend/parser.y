@@ -44,6 +44,6 @@ statement
    : TRETURN expression TSEMICOLOM {$$ = new NReturnStatement(*$2);}
 ;
 expression
-    : TINTEGER {std::cout<<"get expression\n";$$=new NInteger(atoi($1->c_str()));delete $1;}
+    : TINTEGER {$$=new NInteger(atoi($1->c_str()));delete $1;}
     ;
 %%

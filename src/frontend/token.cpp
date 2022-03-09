@@ -786,52 +786,52 @@ YY_RULE_SETUP
 case 2:
 YY_RULE_SETUP
 #line 17 "src/frontend/token.l"
-{std::cout<<"get integer\n";SAVE_TOKEN; return TINTEGER;}
+{SAVE_TOKEN; return TINTEGER;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 18 "src/frontend/token.l"
-{std::cout<<"get return \n";return TOKEN(TRETURN);}
+{return TOKEN(TRETURN);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 19 "src/frontend/token.l"
-{std::cout<<"get main\n";return TOKEN(TMAIN);}
+{return TOKEN(TMAIN);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 20 "src/frontend/token.l"
-{std::cout<<"get int\n";return TOKEN(TINT);}
+{return TOKEN(TINT);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 22 "src/frontend/token.l"
-{std::cout<<"get identifier\n";SAVE_TOKEN; return TIDENTIFIER;}
+{SAVE_TOKEN; return TIDENTIFIER;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 24 "src/frontend/token.l"
-{std::cout<<"get ;\n";return TOKEN(TSEMICOLOM);}
+{return TOKEN(TSEMICOLOM);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 25 "src/frontend/token.l"
-{std::cout<<"get ;\n";return TOKEN(TLPAREN);}
+{return TOKEN(TLPAREN);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 26 "src/frontend/token.l"
-{std::cout<<"get ;\n";return TOKEN(TRPAREN);}
+{return TOKEN(TRPAREN);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 27 "src/frontend/token.l"
-{std::cout<<"get ;\n";return TOKEN(TLBPAREN);}
+{return TOKEN(TLBPAREN);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 28 "src/frontend/token.l"
-{std::cout<<"get ;\n";return TOKEN(TRBPAREN);}
+{return TOKEN(TRBPAREN);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
