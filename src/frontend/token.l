@@ -26,5 +26,5 @@
 ")" {return TOKEN(TRPAREN);}
 "{" {return TOKEN(TLBPAREN);}
 "}" {return TOKEN(TRBPAREN);}
-
+<<EOF>> {yyterminate();}
 %%

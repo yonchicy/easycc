@@ -1096,7 +1096,7 @@ yyreduce:
 
   case 6: /* expression: TINTEGER  */
 #line 47 "src/frontend/parser.y"
-               {std::cout<<"get expression\n";(yyval.expr)=new NInteger(atoi((yyvsp[0].string)->c_str()));delete (yyvsp[0].string);}
+               {(yyval.expr)=new NInteger(atoi((yyvsp[0].string)->c_str()));delete (yyvsp[0].string);}
 #line 1101 "src/frontend/parser.cpp"
     break;
 

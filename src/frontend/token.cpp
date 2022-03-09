@@ -833,14 +833,16 @@ YY_RULE_SETUP
 #line 28 "src/frontend/token.l"
 {return TOKEN(TRBPAREN);}
 	YY_BREAK
+case YY_STATE_EOF(INITIAL):
+#line 29 "src/frontend/token.l"
+{yyterminate();}
+	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 30 "src/frontend/token.l"
 ECHO;
 	YY_BREAK
-#line 842 "src/frontend/token.cpp"
-case YY_STATE_EOF(INITIAL):
-	yyterminate();
+#line 846 "src/frontend/token.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
