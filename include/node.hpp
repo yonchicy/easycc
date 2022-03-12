@@ -65,7 +65,6 @@ class NProgram:public NStatement{
     public:
         const NFunctionDeclaration& FuncDeclaration;
         NProgram(const NFunctionDeclaration& _FuncDeclaration):FuncDeclaration(_FuncDeclaration){
-            std::cout<<"get a program"<<std::endl;
         };
         void *gen()const  override;
 };
