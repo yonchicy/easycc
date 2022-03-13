@@ -42,8 +42,21 @@ void* NType::gen()const{
     return nullptr;
 }
 void* NUnary::gen()const{
+    unary.gen();
+    gen_pop("t0");
+    if(_operator=="!"){
+        printf("\tseqz t0, t0\n");
+    }
+    else if (_operator == "~"){
+        printf("\tnot t0, t0\n");
+    }
+    else if (_operator == "-"){
+        printf("\tneg t0, t0\n");
+    }
+    gen_push("t0");
     return nullptr;
 }
 void* NExpression::gen()const{
+    unary.gen();
     return nullptr;
 }
