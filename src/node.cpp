@@ -41,3 +41,9 @@ void* NInteger::gen()const{
 void* NType::gen()const{
     return nullptr;
 }
+void* NUnary::gen()const{
+    return nullptr;
+}
+void* NExpression::gen()const{
+    return nullptr;
+}

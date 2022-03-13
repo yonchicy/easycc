@@ -63,7 +63,10 @@ extern int yydebug;
     TLPAREN = 264,                 /* TLPAREN  */
     TRPAREN = 265,                 /* TRPAREN  */
     TLBPAREN = 266,                /* TLBPAREN  */
-    TRBPAREN = 267                 /* TRBPAREN  */
+    TRBPAREN = 267,                /* TRBPAREN  */
+    TMINUS = 268,                  /* TMINUS  */
+    TNOT = 269,                    /* TNOT  */
+    TWAVE = 270                    /* TWAVE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -79,11 +82,12 @@ NExpression *expr;
 NIdentifier *ident;
 NFunctionDeclaration * func_decl;
 NType *type;
+NUnaryBase *unary;
 int token;
 std::string *string;
 NProgram *program;
 
-#line 87 "src/frontend/parser.hpp"
+#line 91 "src/frontend/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;
