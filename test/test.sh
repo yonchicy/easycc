@@ -1,27 +1,26 @@
 #!/bin/bash
-assert() {
-  expected="$1"
-  input="$2"
 
-  ./chibicc "$input" > tmp.s || exit
-  gcc -static -o tmp tmp.s
-  ./tmp
+
+for c_file in *.c
+do
+  echo [testing] "$c_file"
+  riscv64-unknown-elf-gcc -o tmp "$c_file"
+  qemu-riscv64 tmp
+  expected="$?"
+
+  ../build/easycc "$c_file" > tmp.s || exit
+  riscv64-unknown-elf-gcc -o tmp tmp.s
+  qemu-riscv64 tmp
   actual="$?"
+  rm tmp.s
+  rm tmp
 
   if [ "$actual" = "$expected" ]; then
-    echo "$input => $actual"
+    echo "$c_file => $actual"
   else
-    echo "$input => $expected expected, but got $actual"
+    echo "$c_file => $expected expected, but got $actual"
     exit 1
   fi
-}
 
-assert 0 0
-assert 42 42
-assert 21 '5+20-4'
-assert 41 ' 12 + 34 - 5 '
-assert 47 '5+6*7'
-assert 15 '5*(9-6)'
-assert 4 '(3+5)/2'
-
+done 
 echo OK
