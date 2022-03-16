@@ -1,4 +1,4 @@
-#include "../include/node.hpp"
+#include "../include/node.h"
 #include <cstdio>
 
 void gen_push(const char* reg) {

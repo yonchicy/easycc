@@ -1,6 +1,4 @@
 #!/bin/bash
-
-
 for c_file in *.c
 do
   echo [testing] "$c_file"

@@ -1,15 +1,17 @@
 
 #include <cstdio>
 #include <iostream>
-#include "../include/node.hpp"
+#include "../include/error.h"
+#include "../include/node.h"
 #include "./frontend/parser.hpp"
 
 extern int yyparse();
 extern int     yyrestart(FILE*);
 extern FILE *yyin;
+int yyline;
 extern NProgram *programBlock;
 int main(int argc,char* argv[]){
-    // 处理input_file
+    // 处理input_fil
     if (argc<2) {
         yyparse();
         return 0;

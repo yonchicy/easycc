@@ -33,3 +33,5 @@
 
 build
 .idea
+tmp
+tmp.s

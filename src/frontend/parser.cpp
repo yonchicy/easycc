@@ -69,7 +69,7 @@
 /* First part of user prologue.  */
 #line 1 "src/frontend/parser.y"
 
-    #include "../../include/node.hpp"
+    #include "../../include/node.h"
     NProgram *programBlock;
     extern int yylex();
     void yyerror(const char*s){printf("ERROR:%s\n",s);}

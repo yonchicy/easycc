@@ -45,3 +45,6 @@ clean:
 	# -rm ./src/frontend/parser.hpp
 	# -rm ./src/frontend/parser.cpp
 
+.PHONY:test
+test:
+	cd test && ./test.sh

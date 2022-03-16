@@ -3,8 +3,9 @@
 
 #include <string>
 #include <iostream>
-#include "../../include/node.hpp"
+#include "../../include/node.h"
 #include "./parser.hpp"
+extern int yyline;
 
 #define SAVE_TOKEN yylval.string = new std::string(yytext,yyleng)
 #define TOKEN(t) (yylval.token=t)
@@ -13,7 +14,8 @@
 
 %%
 
-[ \t\n] {}
+[ \t] {}
+\n {yyline++;}
 [0-9]+  {SAVE_TOKEN; return TINTEGER;}
 "return" {return TOKEN(TRETURN);}
 "main" {return TOKEN(TMAIN);}
