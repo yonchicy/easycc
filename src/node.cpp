@@ -1,22 +1,22 @@
 #include "../include/node.h"
 #include <cstdio>
-
+extern FILE* output;
 void gen_push(const char* reg) {
     // debug("PUSH %s\n", reg);
-    printf("\taddi sp, sp, -%d\n", 4);
-    printf("\tsw %s, 0(sp)\n", reg);
+    fprintf(output,"\taddi sp, sp, -%d\n", 4);
+    fprintf(output,"\tsw %s, 0(sp)\n", reg);
 }
 
 void gen_pop(const char* reg) {
     // debug("POP %s\n", reg);
-    printf("\tlw %s, 0(sp)\n", reg);
-    printf("\taddi sp, sp, %d\n", 4);
+    fprintf(output,"\tlw %s, 0(sp)\n", reg);
+    fprintf(output,"\taddi sp, sp, %d\n", 4);
 }
 
 void* NProgram::gen()const {
-    printf("\t.text\n");
-        printf("\t.global %s\n", FuncDeclaration.id.c_str());
-        printf("%s:\n", FuncDeclaration.id.c_str());
+    fprintf(output,"\t.text\n");
+        fprintf(output,"\t.global %s\n", FuncDeclaration.id.c_str());
+        fprintf(output,"%s:\n", FuncDeclaration.id.c_str());
         // Emit code
     return FuncDeclaration.gen();
 }
@@ -29,11 +29,11 @@ void *NFunctionDeclaration::gen() const{
 void *NReturnStatement::gen()const{
     expr.gen();
     gen_pop("a0");
-    printf("\tret\n");
+    fprintf(output,"\tret\n");
     return nullptr;
 }
 void* NInteger::gen()const{
-    printf("\tli t0, %lld\n",value);
+    fprintf(output,"\tli t0, %lld\n",value);
     gen_push("t0");
     return nullptr;
 }
@@ -45,13 +45,13 @@ void* NUnary::gen()const{
     unary.gen();
     gen_pop("t0");
     if(_operator=="!"){
-        printf("\tseqz t0, t0\n");
+        fprintf(output,"\tseqz t0, t0\n");
     }
     else if (_operator == "~"){
-        printf("\tnot t0, t0\n");
+        fprintf(output,"\tnot t0, t0\n");
     }
     else if (_operator == "-"){
-        printf("\tneg t0, t0\n");
+        fprintf(output,"\tneg t0, t0\n");
     }
     gen_push("t0");
     return nullptr;

@@ -1,3 +1,4 @@
+MAKEFLAGS += -j 20
 vpath %.cpp src
 vpath %.cpp src/frontend
 
