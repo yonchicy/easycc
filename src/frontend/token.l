@@ -28,8 +28,14 @@ extern int yyline;
 ")" {return TOKEN(TRPAREN);}
 "{" {return TOKEN(TLBPAREN);}
 "}" {return TOKEN(TRBPAREN);}
+
 "-" {return TOKEN(TMINUS);}
 "!" {return TOKEN(TNOT);}
 "~" {return TOKEN(TWAVE);}
+
+"+" {return TOKEN(TPLUS);}
+"/" {return TOKEN(TDIV);}
+"*" {return TOKEN(TMULTI);}
+"%" {return TOKEN(TMOD);}
 <<EOF>> {yyterminate();}
 %%

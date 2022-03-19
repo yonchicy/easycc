@@ -66,7 +66,11 @@ extern int yydebug;
     TRBPAREN = 267,                /* TRBPAREN  */
     TMINUS = 268,                  /* TMINUS  */
     TNOT = 269,                    /* TNOT  */
-    TWAVE = 270                    /* TWAVE  */
+    TWAVE = 270,                   /* TWAVE  */
+    TPLUS = 271,                   /* TPLUS  */
+    TDIV = 272,                    /* TDIV  */
+    TMOD = 273,                    /* TMOD  */
+    TMULTI = 274                   /* TMULTI  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -77,17 +81,20 @@ union YYSTYPE
 {
 #line 8 "src/frontend/parser.y"
 
-NStatement *stmt;
-NExpression *expr;
-NIdentifier *ident;
-NFunctionDeclaration * func_decl;
-NType *type;
-NUnaryBase *unary;
-int token;
-std::string *string;
-NProgram *program;
+NStatement            *stmt;
+NExpression           *expr;
+NIdentifier           *ident;
+NFunctionDeclaration  * func_decl;
+NType                 *type;
+NAdditive             *additive;
+NMultiplicative       *multiplicative;
+NPrimary              *primary;
+NUnary                *unary;
+std::string           *string;
+NProgram              *program;
+int                   token;
 
-#line 91 "src/frontend/parser.hpp"
+#line 98 "src/frontend/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;
