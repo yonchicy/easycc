@@ -1,4 +1,4 @@
-MAKEFLAGS += -j 20
+# MAKEFLAGS += -j 20
 vpath %.cpp src
 vpath %.cpp src/frontend
 
@@ -7,17 +7,17 @@ CPPFLAGS := -std=c++17 -O2
 SOURCE := $(wildcard src/*.cpp src/frontend/*.cpp)
 OBJECTS :=$(patsubst %.cpp,build/%.o,$(notdir $(SOURCE)))
 DEPENDS :=$(patsubst %.o,%.d,$(OBJECTS))
-TAEGETS := build/easycc
+TARGETS := build/easycc
 
 $(shell mkdir -p build)
 
 .PHONY:all
 
-all: $(TAEGETS) scanner
+all: $(TARGETS) scanner
 	@echo build finish
 run:all
 	@ ./build/easycc
-$(TAEGETS) :$(OBJECTS)
+$(TARGETS) :$(OBJECTS)
 	$(CC) $(CPPFLAGS) -lm $^ -o $@
 
 scanner:src/frontend/parser.cpp src/frontend/token.cpp
@@ -41,7 +41,8 @@ build/%.d: %.cpp
 
 .PHONY:clean
 clean:
-	rm -r build/*
+	-rm -r build/*
+	-rm test/*.s
 	# -rm ./src/frontend/token.cpp
 	# -rm ./src/frontend/parser.hpp
 	# -rm ./src/frontend/parser.cpp

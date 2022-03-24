@@ -1,8 +1,9 @@
 %{
     #include "../../include/node.h"
     NProgram *programBlock;
+    extern int yyline;
     extern int yylex();
-    void yyerror(const char*s){printf("ERROR:%s\n",s);}
+    void yyerror(const char*s){printf("ERROR:Line:%d\n%s\n",yyline,s);}
 %}
 
 %union{
@@ -55,17 +56,17 @@ expression
     :additive {$$ = new NExpressionAdditive(*$1);}
     ;
 additive
-    : multiplicative {$$ = new NAddtiveMultipicative(*$1);}
+    : multiplicative {$$ = new NAdditiveMultipicative(*$1);}
     | additive TPLUS multiplicative 
         {$$=new NAddtiveOprtMulti(
             *$1,
             std::string("+"),
-            *$3);}
+            $3);}
     | additive TMINUS multiplicative
         {$$=new NAddtiveOprtMulti(
             *$1,
             std::string("-"),
-            *$3);}
+            $3);}
     ;
 multiplicative
     :unary {$$=new NMultiplicativeUnary(*$1);}

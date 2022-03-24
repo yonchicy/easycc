@@ -48,6 +48,7 @@ int main(int argc,char* argv[]){
     if(!yyin)
       perror(input_file);
     yyparse();
+    programBlock->show_ast();
     programBlock->gen();
     return 0;
 }

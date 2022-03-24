@@ -1,7 +1,8 @@
-#include <cstddef>
+#ifndef _NODE_H_
+#define _NODE_H_
 #include <iostream>
-#include <utility>
 #include <vector>
+#include "../include/error.h"
 class Node;
 class NStatement ;
 class NExpression ;
@@ -30,8 +31,8 @@ public:
     Node(const Node &) = default;
     Node &operator=(Node &&) = default;
     Node &operator=(const Node &) = default;
-    virtual void* gen()const=0;
-
+    virtual void gen() const =0;
+    virtual void show_ast() const =0;
 };
 class NProgram:public Node{
     public:
@@ -39,7 +40,8 @@ class NProgram:public Node{
         explicit NProgram(const NFunctionDeclaration& _FuncDeclaration):
             FuncDeclaration(_FuncDeclaration){
         };
-        void *gen()const  override;
+  void gen() const override;
+  void show_ast() const override;
 };
 class NFunctionDeclaration : public Node {
 public:
@@ -50,7 +52,8 @@ public:
             type(_type),
             id(std::move(_id)) ,
             statement(_statement){}
-  void *gen()const  override;
+  void gen() const override;
+  void show_ast() const override;
 };
 
 class NType : public Node {
@@ -58,31 +61,33 @@ public:
   std::string name;
   explicit NType(std::string  _name) :
       name{std::move(_name)} {}
-  void *gen() const override;
+  void gen() const override;
+  void show_ast() const override;
 };
 
 class NStatement : public Node{
-    public:
-        void*gen() const override{return nullptr; }
 };
 class NReturnStatement:public NStatement{
     public:
         const NExpression &expr;
         explicit NReturnStatement(const NExpression& _expr):
             expr(_expr){}
-        void *gen()const  override;
-        
+
+  void gen() const override;
+  void show_ast() const override;
 };
 
 class NMultiplicative :public Node{
     public:
-  void *gen() const override{return nullptr;}
+  void gen() const override{};
+  void show_ast() const override{};
 };
 class NMultiplicativeUnary:public NMultiplicative{
 public :
   const NUnary &unary;
   NMultiplicativeUnary(const NUnary&_unary):unary(_unary){}
-  void *gen()const  override;
+  void gen() const override;
+  void show_ast() const override;
 
 };
 class NMultiplicativeOprtUnary:public NMultiplicative{
@@ -94,7 +99,9 @@ public  :
                                     std::string _oprt,
                                     const NUnary &_unary):
       left(_left),oprt(std::move(_oprt)) ,unary(_unary){}
-  void *gen()const  override;
+  void gen() const override;
+  void show_ast() const override;
+
 };
 
 
@@ -102,7 +109,8 @@ public  :
 
 class NAdditive :public Node{
     public :
-        void* gen()const override{return nullptr;};
+  void gen() const override{};
+  void show_ast() const override{};
 };
 
 class NAdditiveMultipicative:public NAdditive{
@@ -110,53 +118,59 @@ public:
   const NMultiplicative& multiplicative;
   explicit NAdditiveMultipicative(const NMultiplicative & _multiplicative):
       multiplicative(_multiplicative){};
-  void*gen()const override;
+  void gen() const override;
+  void show_ast() const override;
 };
 class NAddtiveOprtMulti : public NAdditive{
     public:
         const NAdditive & additive;
         const std::string oprt;
-        const NMultiplicative multiplicate;
+        const NMultiplicative* multiplicate;
         NAddtiveOprtMulti(
             const NAdditive & _additive,
             const std::string _oprt,
-            const NMultiplicative _multiplicate
+            const NMultiplicative* _multiplicate
                     ):
                 additive(_additive),
                 oprt(std::move(_oprt)),
                 multiplicate(_multiplicate){}
-        void*gen()const override;
+  void gen() const override;
+  void show_ast() const override;
 };
 
 class NExpression : public Node{
     public:
-        void*gen()const override{return nullptr;}
+  void gen() const override{}
+  void show_ast() const override{};
 };
 class NExpressionAdditive : public NExpression{
     public:
     const NAdditive & additive;
     explicit NExpressionAdditive(const NAdditive &_additive):
         additive(_additive){};
-    void * gen()const override;
+  void gen() const override;
+  void show_ast() const override;
 };
 class NPrimary :public Node{
 public:
-  void* gen()const override{return nullptr;};
+  void gen() const override{};
+  void show_ast() const override{};
 };
 //class NUnaryBase : public Node{
 //    public:
-//    void *gen() const override {return nullptr;}
 //};
 
 class NUnary : public Node {
 public:
-    void *gen() const override {return nullptr;};
+  void gen() const override{};
+  void show_ast() const override{};
 };
 class NUnaryPrimary:public NUnary{
 public :
   const NPrimary & primary;
     NUnaryPrimary(const NPrimary & _primary):primary(_primary){}
-    void *gen() const override ;
+  void gen() const override;
+  void show_ast() const override;
 };
 
 class NUnaryWithOperator:public NUnary{
@@ -165,7 +179,8 @@ class NUnaryWithOperator:public NUnary{
   const NUnary& unary;
   NUnaryWithOperator(std::string  _oprt,const NUnary& _unary):
   oprt(std::move(_oprt)),unary(_unary){};
-  void* gen()const override;
+  void gen() const override;
+  void show_ast() const override;
 };
 class NInteger : public NPrimary {
 public:
@@ -173,13 +188,15 @@ public:
   NInteger(long long _value) :
       value(_value)
     {};
-  void *gen()const override;
+  void gen() const override;
+  void show_ast() const override;
 };
 class NPrimaryExpression : public NPrimary {
 public:
   const NExpression& exp;
   explicit NPrimaryExpression(const NExpression & _exp):exp(_exp){}
-  void*gen()const override;
+  void gen() const override;
+  void show_ast() const override;
 };
 
 
@@ -189,6 +206,7 @@ public:
   NIdentifier(const std::string _name) :
       name(std::move(_name)) {
   }
+  void gen() const override;
+  void show_ast() const override;
 };
-
-
+#endif

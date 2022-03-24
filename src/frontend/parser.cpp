@@ -71,10 +71,11 @@
 
     #include "../../include/node.h"
     NProgram *programBlock;
+    extern int yyline;
     extern int yylex();
-    void yyerror(const char*s){printf("ERROR:%s\n",s);}
+    void yyerror(const char*s){printf("ERROR:Line:%d\n%s\n",yyline,s);}
 
-#line 78 "src/frontend/parser.cpp"
+#line 79 "src/frontend/parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -519,8 +520,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    42,    42,    45,    48,    51,    55,    58,    59,    64,
-      71,    72,    78,    84,    92,    93,    94,    95,    99,   100
+       0,    43,    43,    46,    49,    52,    56,    59,    60,    65,
+      72,    73,    79,    85,    93,    94,    95,    96,   100,   101
 };
 #endif
 
@@ -1098,133 +1099,133 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: function  */
-#line 42 "src/frontend/parser.y"
+#line 43 "src/frontend/parser.y"
                {programBlock = new NProgram(*(yyvsp[0].func_decl));}
-#line 1104 "src/frontend/parser.cpp"
+#line 1105 "src/frontend/parser.cpp"
     break;
 
   case 3: /* function: type TMAIN TLPAREN TRPAREN TLBPAREN statement TRBPAREN  */
-#line 45 "src/frontend/parser.y"
+#line 46 "src/frontend/parser.y"
                                                              {(yyval.func_decl)=new NFunctionDeclaration(*(yyvsp[-6].type),std::string("main"),*(yyvsp[-1].stmt));}
-#line 1110 "src/frontend/parser.cpp"
+#line 1111 "src/frontend/parser.cpp"
     break;
 
   case 4: /* type: TINT  */
-#line 48 "src/frontend/parser.y"
+#line 49 "src/frontend/parser.y"
            {(yyval.type)=new NType(std::string("int"));}
-#line 1116 "src/frontend/parser.cpp"
+#line 1117 "src/frontend/parser.cpp"
     break;
 
   case 5: /* statement: TRETURN expression TSEMICOLOM  */
-#line 51 "src/frontend/parser.y"
+#line 52 "src/frontend/parser.y"
                                    {(yyval.stmt) = new NReturnStatement(*(yyvsp[-1].expr));}
-#line 1122 "src/frontend/parser.cpp"
+#line 1123 "src/frontend/parser.cpp"
     break;
 
   case 6: /* expression: additive  */
-#line 55 "src/frontend/parser.y"
+#line 56 "src/frontend/parser.y"
               {(yyval.expr) = new NExpressionAdditive(*(yyvsp[0].additive));}
-#line 1128 "src/frontend/parser.cpp"
+#line 1129 "src/frontend/parser.cpp"
     break;
 
   case 7: /* additive: multiplicative  */
-#line 58 "src/frontend/parser.y"
-                     {(yyval.additive) = new NAddtiveMultipicative(*(yyvsp[0].multiplicative));}
-#line 1134 "src/frontend/parser.cpp"
+#line 59 "src/frontend/parser.y"
+                     {(yyval.additive) = new NAdditiveMultipicative(*(yyvsp[0].multiplicative));}
+#line 1135 "src/frontend/parser.cpp"
     break;
 
   case 8: /* additive: additive TPLUS multiplicative  */
-#line 60 "src/frontend/parser.y"
+#line 61 "src/frontend/parser.y"
         {(yyval.additive)=new NAddtiveOprtMulti(
             *(yyvsp[-2].additive),
             std::string("+"),
-            *(yyvsp[0].multiplicative));}
-#line 1143 "src/frontend/parser.cpp"
+            (yyvsp[0].multiplicative));}
+#line 1144 "src/frontend/parser.cpp"
     break;
 
   case 9: /* additive: additive TMINUS multiplicative  */
-#line 65 "src/frontend/parser.y"
+#line 66 "src/frontend/parser.y"
         {(yyval.additive)=new NAddtiveOprtMulti(
             *(yyvsp[-2].additive),
             std::string("-"),
-            *(yyvsp[0].multiplicative));}
-#line 1152 "src/frontend/parser.cpp"
+            (yyvsp[0].multiplicative));}
+#line 1153 "src/frontend/parser.cpp"
     break;
 
   case 10: /* multiplicative: unary  */
-#line 71 "src/frontend/parser.y"
+#line 72 "src/frontend/parser.y"
            {(yyval.multiplicative)=new NMultiplicativeUnary(*(yyvsp[0].unary));}
-#line 1158 "src/frontend/parser.cpp"
+#line 1159 "src/frontend/parser.cpp"
     break;
 
   case 11: /* multiplicative: multiplicative TMULTI unary  */
-#line 73 "src/frontend/parser.y"
+#line 74 "src/frontend/parser.y"
         {(yyval.multiplicative)=new NMultiplicativeOprtUnary(
                 *(yyvsp[-2].multiplicative),
                 std::string("*"),
                 *(yyvsp[0].unary)
         );}
-#line 1168 "src/frontend/parser.cpp"
+#line 1169 "src/frontend/parser.cpp"
     break;
 
   case 12: /* multiplicative: multiplicative TDIV unary  */
-#line 79 "src/frontend/parser.y"
+#line 80 "src/frontend/parser.y"
         {(yyval.multiplicative)=new NMultiplicativeOprtUnary(
                 *(yyvsp[-2].multiplicative),
                 std::string("/"),
                 *(yyvsp[0].unary)
         );}
-#line 1178 "src/frontend/parser.cpp"
+#line 1179 "src/frontend/parser.cpp"
     break;
 
   case 13: /* multiplicative: multiplicative TMOD unary  */
-#line 85 "src/frontend/parser.y"
+#line 86 "src/frontend/parser.y"
         {(yyval.multiplicative)=new NMultiplicativeOprtUnary(
                 *(yyvsp[-2].multiplicative),
                 std::string("%"),
                 *(yyvsp[0].unary)
         );}
-#line 1188 "src/frontend/parser.cpp"
+#line 1189 "src/frontend/parser.cpp"
     break;
 
   case 14: /* unary: primary  */
-#line 92 "src/frontend/parser.y"
+#line 93 "src/frontend/parser.y"
              {(yyval.unary)=new NUnaryPrimary(*(yyvsp[0].primary));}
-#line 1194 "src/frontend/parser.cpp"
+#line 1195 "src/frontend/parser.cpp"
     break;
 
   case 15: /* unary: TMINUS unary  */
-#line 93 "src/frontend/parser.y"
+#line 94 "src/frontend/parser.y"
                    {(yyval.unary) = new NUnaryWithOperator(std::string("-"),*(yyvsp[0].unary));}
-#line 1200 "src/frontend/parser.cpp"
+#line 1201 "src/frontend/parser.cpp"
     break;
 
   case 16: /* unary: TNOT unary  */
-#line 94 "src/frontend/parser.y"
+#line 95 "src/frontend/parser.y"
                  {(yyval.unary) = new NUnaryWithOperator(std::string("!"),*(yyvsp[0].unary));}
-#line 1206 "src/frontend/parser.cpp"
+#line 1207 "src/frontend/parser.cpp"
     break;
 
   case 17: /* unary: TWAVE unary  */
-#line 95 "src/frontend/parser.y"
+#line 96 "src/frontend/parser.y"
                   {(yyval.unary) = new NUnaryWithOperator(std::string("~"),*(yyvsp[0].unary));}
-#line 1212 "src/frontend/parser.cpp"
+#line 1213 "src/frontend/parser.cpp"
     break;
 
   case 18: /* primary: TINTEGER  */
-#line 99 "src/frontend/parser.y"
+#line 100 "src/frontend/parser.y"
                {(yyval.primary)=new NInteger(atoi((yyvsp[0].string)->c_str()));delete (yyvsp[0].string);}
-#line 1218 "src/frontend/parser.cpp"
+#line 1219 "src/frontend/parser.cpp"
     break;
 
   case 19: /* primary: TLPAREN expression TRPAREN  */
-#line 100 "src/frontend/parser.y"
+#line 101 "src/frontend/parser.y"
                                  {(yyval.primary) = new NPrimaryExpression(*(yyvsp[-1].expr));}
-#line 1224 "src/frontend/parser.cpp"
+#line 1225 "src/frontend/parser.cpp"
     break;
 
 
-#line 1228 "src/frontend/parser.cpp"
+#line 1229 "src/frontend/parser.cpp"
 
       default: break;
     }
@@ -1417,5 +1418,5 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 102 "src/frontend/parser.y"
+#line 103 "src/frontend/parser.y"
 

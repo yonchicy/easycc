@@ -14,49 +14,40 @@ void gen_pop(const char *reg) {
   fprintf(output, "\taddi sp, sp, %d\n", 4);
 }
 
-void *NProgram::gen() const {
-    INFO("program\n");
+void NProgram::gen() const {
   fprintf(output, "\t.text\n");
   fprintf(output, "\t.global %s\n", FuncDeclaration.id.c_str());
   fprintf(output, "%s:\n", FuncDeclaration.id.c_str());
   // Emit code
-  return FuncDeclaration.gen();
+  FuncDeclaration.gen();
 }
 
-void *NFunctionDeclaration::gen() const { return statement.gen(); }
+void NFunctionDeclaration::gen() const {
+  statement.gen();
+}
 
-void *NReturnStatement::gen() const {
-    INFO("NReturnStatement\n");
+void NReturnStatement::gen() const {
   expr.gen();
   gen_pop("a0");
   fprintf(output, "\tret\n");
-  return nullptr;
 }
-void *NInteger::gen() const {
-    INFO("NInteger\n");
+void NInteger::gen() const {
   fprintf(output, "\tli t0, %lld\n", value);
   gen_push("t0");
-  return nullptr;
 }
 
-void *NType::gen() const { return nullptr; }
+void NType::gen() const {
+}
 
-// TODO
-//
-void *NExpressionAdditive::gen() const {
-    INFO("NExpressionAdditive\n");
+void NExpressionAdditive::gen() const {
   this->additive.gen();
-  return nullptr;
 }
-void *NAddtiveMultipicative::gen() const {
-    INFO("NAddtiveMultipicative\n");
+void NAdditiveMultipicative::gen() const {
   this->multiplicative.gen();
-  return nullptr;
 }
-void *NAddtiveOprtMulti::gen() const {
-    INFO("NAddtiveOprtMulti\n");
+void NAddtiveOprtMulti::gen() const {
   additive.gen();
-  multiplicate.gen();
+  multiplicate->gen();
   gen_pop("t1");
   gen_pop("t0");
   if (this->oprt == "+") { 
@@ -67,15 +58,11 @@ void *NAddtiveOprtMulti::gen() const {
     ERROR("error in NAddtiveOprtMulti::gen()\n");
   }
   gen_push("t0");
-  return nullptr;
 }
-void *NMultiplicativeUnary::gen() const {
-    INFO("NMultiplicativeUnary\n");
+void NMultiplicativeUnary::gen() const {
     this->unary.gen();
-    return nullptr; 
 }
-void *NMultiplicativeOprtUnary::gen() const {
-    INFO("NMultiplicativeOprtUnary\n");
+void NMultiplicativeOprtUnary::gen() const {
     this->left.gen();
     this->unary.gen();
     gen_pop("t1");
@@ -94,15 +81,11 @@ void *NMultiplicativeOprtUnary::gen() const {
     }
     gen_push("t0");
 
-    return nullptr; 
 }
-void *NUnaryPrimary::gen() const { 
-    INFO("NUnaryPrimary\n");
+void NUnaryPrimary::gen() const {
     this->primary.gen();
-    return nullptr; 
 }
-void *NUnaryWithOperator::gen() const {
-    INFO("NUnaryWithOperator\n");
+void NUnaryWithOperator::gen() const {
     this->unary.gen();
     gen_pop("t0");
     if(this->oprt == "-"){
@@ -118,10 +101,7 @@ void *NUnaryWithOperator::gen() const {
         ERROR("error in NUnaryWithOperator::gen()\n ");
     }
     gen_push("t0");
-    return nullptr;
 }
-void *NPrimaryExpression::gen() const { 
-    INFO("NPrimaryExpression\n");
+void NPrimaryExpression::gen() const {
     this->exp.gen();
-    return nullptr; 
 }
