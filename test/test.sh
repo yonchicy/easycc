@@ -1,5 +1,5 @@
 #!/bin/bash
-for c_file in *.c
+for c_file in $(find . -name '*.c')
 do
   echo [testing] "$c_file"
   riscv64-unknown-elf-gcc -o tmp "$c_file"
