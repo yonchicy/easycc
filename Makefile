@@ -1,4 +1,4 @@
-# MAKEFLAGS += -j 20
+MAKEFLAGS += -j 20
 vpath %.cpp src
 vpath %.cpp src/frontend
 
@@ -41,11 +41,7 @@ build/%.d: %.cpp
 
 .PHONY:clean
 clean:
-	-rm -r build/*
-	-rm test/*.s
-	# -rm ./src/frontend/token.cpp
-	# -rm ./src/frontend/parser.hpp
-	# -rm ./src/frontend/parser.cpp
+	@rm -r build/* ||true
 
 .PHONY:test
 test:

@@ -40,12 +40,6 @@ void NType::show_ast() const {
   TRACE( "Type(%s)", this->name.c_str());
 }
 
-void NExpressionAdditive::show_ast() const {
-  TRACE( "NExpressionAdditive\n");
-  push_depth();
-  this->additive.show_ast();
-  pop_depth();
-}
 void NAdditiveMultipicative::show_ast() const {
   TRACE( "NAdditiveMultipicative\n");
   push_depth();
@@ -76,6 +70,38 @@ void NMultiplicativeOprtUnary::show_ast() const {
     this->unary.show_ast();
     pop_depth();
 }
+// TODO
+// expression
+void NExpressionLogicalOr:: show_ast()const {
+}
+// logical_or
+void NLogicalOrAnd:: show_ast()const {
+}
+void NLogicalORBinary:: show_ast()const {
+
+}
+// logical_and
+void NLogicalAndEquality:: show_ast()const {
+    
+}
+void NLogicalAndBinary:: show_ast()const {
+    
+}
+// equality
+void  NEqualityRelational::show_ast() const{
+
+}
+void  NEqualityBinary::show_ast() const{
+
+}
+// relational
+void  NRelationalAdditive::show_ast() const{
+
+}
+void  NRelationalBinary::show_ast() const{
+
+}
+// END TODO
 void NUnaryPrimary::show_ast() const { 
     TRACE( "NUnaryPrimary\n");
     push_depth();
