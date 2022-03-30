@@ -1,11 +1,15 @@
 #ifndef _NODE_H_
 #define _NODE_H_
-#include "../include/error.h"
+#include "error.h"
+#include "runtime.h"
 #include <algorithm>
 #include <iostream>
 #include <vector>
+extern std::unordered_map<std::string, Varible> VaribleTable;
 class Node;
+class NStatements;
 class NStatement;
+class NDeclaration;
 class NExpression;
 class NIdentifier;
 class NUnary;
@@ -51,10 +55,10 @@ class NFunctionDeclaration : public Node {
 public:
   const NType &type;
   const std::string id;
-  const Node &statement;
+  const NStatements *statements;
   NFunctionDeclaration(const NType &_type, std::string _id,
-                       const Node &_statement)
-      : type(_type), id(std::move(_id)), statement(_statement) {}
+                       const NStatements *_statements)
+      : type(_type), id(std::move(_id)), statements(_statements) {}
   void gen() const override;
   void show_ast() const override;
 };
@@ -66,7 +70,14 @@ public:
   void gen() const override;
   void show_ast() const override;
 };
-
+// statemets node
+class NStatements : public Node {
+public:
+  std::vector<NStatement *> stmts;
+  void gen() const override;
+  void show_ast() const override;
+};
+// statement
 class NStatement : public Node {};
 class NReturnStatement : public NStatement {
 public:
@@ -76,7 +87,29 @@ public:
   void gen() const override;
   void show_ast() const override;
 };
+class NStatementExpr : public NStatement {
+public:
+  const NExpression *expr;
+  explicit NStatementExpr(const NExpression *_expr) : expr(_expr) {}
 
+  void gen() const override;
+  void show_ast() const override;
+};
+class NStatementDeclaration : public NStatement {
+public:
+  const NDeclaration *const declaration;
+  explicit NStatementDeclaration(const NDeclaration *const declaration)
+      : declaration(declaration) {}
+  void gen() const override;
+  void show_ast() const override;
+};
+
+// declaration
+class NDeclaration : public Node {};
+class NDeclarationWithAssign:public NDeclaration{
+    std::string id;
+};
+//multiplicative
 class NMultiplicative : public Node {
 public:
   void gen() const override{};

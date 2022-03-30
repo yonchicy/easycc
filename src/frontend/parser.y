@@ -1,28 +1,32 @@
 %{
     #include "../../include/node.h"
+    #include <vector.h>
     NProgram *programBlock;
     extern int yyline;
     extern int yylex();
     void yyerror(const char*s){printf("ERROR:Line:%d\n%s\n",yyline,s);}
+    void insertVarible(std::string& type,std::string& id);
 %}
 
 %union{
-NStatement           *stmt;
-NExpression          *expr;
-NLogicalOr           *logical_or;
-NLogicalAnd          *logical_and;
-NEquality            *equality;
-NRelational          *relational;
-NIdentifier          *ident;
-NFunctionDeclaration *func_decl;
-NType                *type;
-NAdditive            *additive;
-NMultiplicative      *multiplicative;
-NPrimary             *primary;
-NUnary               *unary;
-std::string          *string;
-NProgram             *program;
-int                  token;
+NStatement                *stmt;
+NStatements               *stmts;
+NExpression               *expr;
+NLogicalOr                *logical_or;
+NLogicalAnd               *logical_and;
+NEquality                 *equality;
+NRelational               *relational;
+NIdentifier               *ident;
+NFunctionDeclaration      *func_decl;
+NType                     *type;
+NAdditive                 *additive;
+NMultiplicative           *multiplicative;
+NPrimary                  *primary;
+NUnary                    *unary;
+std::string               *string;
+NProgram                  *program;
+NDeclaration              *declaration;
+int                       token;
 }
 
 %token <string>        TIDENTIFIER TINTEGER
@@ -30,12 +34,14 @@ int                  token;
 %token <token>         TMAIN
 %token <token>         TINT
 %token <token>         TRETURN TLPAREN TRPAREN TLBPAREN TRBPAREN TMINUS TNOT TWAVE TPLUS TDIV TMOD TMULTI
-%token <token>         TL TLE TG TGE TNE TE TLOGAND TLOGOR
+%token <token>         TL TLE TG TGE TNE TE TLOGAND TLOGOR 
+%token <token>         TASSIGN
 
 %type <expr>           expression
 %type <unary>          unary
 %type <type>           type
 %type <stmt>           statement
+%type <stmts>          statements
 %type <func_decl>      function
 %type <program>        program
 %type <additive>       additive
@@ -47,23 +53,41 @@ int                  token;
 %type <equality>       equality;
 %type <relational>     relational;
 
+%type<declaration>     declaration;
 %start program
 %%
 program
     : function {programBlock = new NProgram(*$1);}
         ;
 function
-    : type TIDENTIFIER TLPAREN TRPAREN TLBPAREN statement TRBPAREN {$$=new NFunctionDeclaration(*$1,*$2,*$6);}
+    : type TIDENTIFIER TLPAREN TRPAREN TLBPAREN statements TRBPAREN {$$=new NFunctionDeclaration(*$1,*$2,*$6);}
 ;
+statements:
+     : statement {$$ = new NStatements(); $$->stmts.push($1);}
+     | statements statement {$1->stmts.push($2);$$=$1;}
+     ;
+statement
+   : TRETURN expression TSEMICOLOM {$$ = new NReturnStatement(*$2);}
+   | TSEMICOLOM
+   | expression TSEMICOLOM{$$ = new NStatementExpr($2);}
+   | declaration {$$= new NStatementDeclaration($1);}
+;
+declaration
+    : type TIDENTIFIER TASSIGN expression  TSEMICOLOM
+    | type TIDENTIFIER TSEMICOLOM {insertVarible(*$1,*$2){
+    }
+    ;
+
 type
     : TINT {$$=new NType(std::string("int"));}
 ;
-statement
-   : TRETURN expression TSEMICOLOM {$$ = new NReturnStatement(*$2);}
-;
 
 expression
+    : assignment
+    ;
+assignment
     : logical_or {$$=new NExpressionLogicalOr($1);}
+    | TIDENTIFIER TASSIGN expression
     ;
 
 logical_or 
@@ -122,8 +146,7 @@ multiplicative
                 std::string("%"),
                 *$3
         );}
-;
-unary
+; unary
     : primary{$$=new NUnaryPrimary(*$1);}
     | TMINUS unary {$$ = new NUnaryWithOperator(std::string("-"),*$2);}
     | TNOT unary {$$ = new NUnaryWithOperator(std::string("!"),*$2);}
@@ -133,5 +156,9 @@ unary
 primary
     : TINTEGER {$$=new NInteger(atoi($1->c_str()));delete $1;}
     | TLPAREN expression TRPAREN {$$ = new NPrimaryExpression(*$2);}
+    | TIDENTIFIER
     ;
 %%
+void insertVarible(std::string& type,std::string& id){
+    VaribleTable.insert(make_pair<std::string, VaribleInfo>(std::string(id),VaribleInfo(id)));
+}

@@ -45,5 +45,7 @@ extern int yyline;
 "==" {return TOKEN(TE);}
 "&&" {return TOKEN(TLOGAND);}
 "||" {return TOKEN(TLOGOR);}
+
+"=" {return TOKEN(TASSIGN);}
 <<EOF>> {yyterminate();}
 %%

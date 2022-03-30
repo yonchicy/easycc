@@ -16,13 +16,16 @@ void pop(const char *reg) {
 
 void NProgram::gen() const {
   fprintf(output, "\t.text\n");
-  fprintf(output, "\t.global %s\n", FuncDeclaration.id.c_str());
-  fprintf(output, "%s:\n", FuncDeclaration.id.c_str());
   // Emit code
   FuncDeclaration.gen();
 }
 
-void NFunctionDeclaration::gen() const { statement.gen(); }
+void NFunctionDeclaration::gen() const {
+    fprintf(output, "\t.global %s\n", id.c_str());
+    fprintf(output, "%s:\n", id.c_str());
+    statement.gen(); }
+
+
 
 void NReturnStatement::gen() const {
   expr.gen();
