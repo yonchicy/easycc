@@ -53,7 +53,7 @@ program
     : function {programBlock = new NProgram(*$1);}
         ;
 function
-    : type TMAIN TLPAREN TRPAREN TLBPAREN statement TRBPAREN {$$=new NFunctionDeclaration(*$1,std::string("main"),*$6);}
+    : type TIDENTIFIER TLPAREN TRPAREN TLBPAREN statement TRBPAREN {$$=new NFunctionDeclaration(*$1,*$2,*$6);}
 ;
 type
     : TINT {$$=new NType(std::string("int"));}

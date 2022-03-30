@@ -18,7 +18,6 @@ extern int yyline;
 \n {yyline++;}
 [0-9]+  {SAVE_TOKEN; return TINTEGER;}
 "return" {return TOKEN(TRETURN);}
-"main" {return TOKEN(TMAIN);}
 "int" {return TOKEN(TINT);}
 
 [a-zA-Z_][a-zA-Z0-9_]* {SAVE_TOKEN; return TIDENTIFIER;}

@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.8.2.  */
+/* A Bison parser, made by GNU Bison 3.5.1.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,9 +31,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
-   especially those whose name start with YY_ or yy_.  They are
-   private implementation details that can be changed or removed.  */
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
 
 #ifndef YY_YY_SRC_FRONTEND_PARSER_HPP_INCLUDED
 # define YY_YY_SRC_FRONTEND_PARSER_HPP_INCLUDED
@@ -45,42 +44,37 @@
 extern int yydebug;
 #endif
 
-/* Token kinds.  */
+/* Token type.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
-    TIDENTIFIER = 258,             /* TIDENTIFIER  */
-    TINTEGER = 259,                /* TINTEGER  */
-    TSEMICOLOM = 260,              /* TSEMICOLOM  */
-    TMAIN = 261,                   /* TMAIN  */
-    TINT = 262,                    /* TINT  */
-    TRETURN = 263,                 /* TRETURN  */
-    TLPAREN = 264,                 /* TLPAREN  */
-    TRPAREN = 265,                 /* TRPAREN  */
-    TLBPAREN = 266,                /* TLBPAREN  */
-    TRBPAREN = 267,                /* TRBPAREN  */
-    TMINUS = 268,                  /* TMINUS  */
-    TNOT = 269,                    /* TNOT  */
-    TWAVE = 270,                   /* TWAVE  */
-    TPLUS = 271,                   /* TPLUS  */
-    TDIV = 272,                    /* TDIV  */
-    TMOD = 273,                    /* TMOD  */
-    TMULTI = 274,                  /* TMULTI  */
-    TL = 275,                      /* TL  */
-    TLE = 276,                     /* TLE  */
-    TG = 277,                      /* TG  */
-    TGE = 278,                     /* TGE  */
-    TNE = 279,                     /* TNE  */
-    TE = 280,                      /* TE  */
-    TLOGAND = 281,                 /* TLOGAND  */
-    TLOGOR = 282                   /* TLOGOR  */
+    TIDENTIFIER = 258,
+    TINTEGER = 259,
+    TSEMICOLOM = 260,
+    TMAIN = 261,
+    TINT = 262,
+    TRETURN = 263,
+    TLPAREN = 264,
+    TRPAREN = 265,
+    TLBPAREN = 266,
+    TRBPAREN = 267,
+    TMINUS = 268,
+    TNOT = 269,
+    TWAVE = 270,
+    TPLUS = 271,
+    TDIV = 272,
+    TMOD = 273,
+    TMULTI = 274,
+    TL = 275,
+    TLE = 276,
+    TG = 277,
+    TGE = 278,
+    TNE = 279,
+    TE = 280,
+    TLOGAND = 281,
+    TLOGOR = 282
   };
-  typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
@@ -106,7 +100,7 @@ std::string          *string;
 NProgram             *program;
 int                  token;
 
-#line 110 "src/frontend/parser.hpp"
+#line 104 "src/frontend/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -117,8 +111,6 @@ typedef union YYSTYPE YYSTYPE;
 
 extern YYSTYPE yylval;
 
-
 int yyparse (void);
-
 
 #endif /* !YY_YY_SRC_FRONTEND_PARSER_HPP_INCLUDED  */
