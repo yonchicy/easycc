@@ -5,12 +5,13 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
-extern std::unordered_map<std::string, Varible> VaribleTable;
+extern std::unordered_map<std::string, VaribleInfo> VaribleTable;
 class Node;
 class NStatements;
 class NStatement;
 class NDeclaration;
 class NExpression;
+class NAssign;
 class NIdentifier;
 class NUnary;
 class NFunctionDeclaration;
@@ -23,15 +24,6 @@ class NLogicalOr;
 class NLogicalAnd;
 class NEquality;
 class NRelational;
-enum class NodeClass {
-  NProgram,
-  NFunctionDeclaration,
-  NReturnStatement,
-  NInteger,
-  NType,
-  NUnary,
-
-};
 
 class Node {
 public:
@@ -58,7 +50,7 @@ public:
   const NStatements *statements;
   NFunctionDeclaration(const NType &_type, std::string _id,
                        const NStatements *_statements)
-      : type(_type), id(std::move(_id)), statements(_statements) {}
+      : type(_type), id((_id)), statements(_statements) {}
   void gen() const override;
   void show_ast() const override;
 };
@@ -66,7 +58,7 @@ public:
 class NType : public Node {
 public:
   std::string name;
-  explicit NType(std::string _name) : name{std::move(_name)} {}
+  explicit NType(std::string _name) : name{(_name)} {}
   void gen() const override;
   void show_ast() const override;
 };
@@ -87,6 +79,13 @@ public:
   void gen() const override;
   void show_ast() const override;
 };
+class NStatementNull : public NStatement {
+public:
+  NStatementNull() = default;
+  void gen() const override;
+  void show_ast() const override;
+};
+
 class NStatementExpr : public NStatement {
 public:
   const NExpression *expr;
@@ -106,10 +105,16 @@ public:
 
 // declaration
 class NDeclaration : public Node {};
-class NDeclarationWithAssign:public NDeclaration{
-    std::string id;
+class NDeclarationWithAssign : public NDeclaration {
+public:
+  std::string id;
+  const NExpression *const expr;
+  NDeclarationWithAssign(std::string id, const NExpression *const expr)
+      : id(id), expr(expr) {}
+  void gen() const override;
+  void show_ast() const override;
 };
-//multiplicative
+// multiplicative
 class NMultiplicative : public Node {
 public:
   void gen() const override{};
@@ -129,7 +134,7 @@ public:
   const NUnary &unary;
   explicit NMultiplicativeOprtUnary(const NMultiplicative &_left,
                                     std::string _oprt, const NUnary &_unary)
-      : left(_left), oprt(std::move(_oprt)), unary(_unary) {}
+      : left(_left), oprt((_oprt)), unary(_unary) {}
   void gen() const override;
   void show_ast() const override;
 };
@@ -157,8 +162,7 @@ public:
   const NMultiplicative *multiplicate;
   NAddtiveOprtMulti(const NAdditive &_additive, const std::string _oprt,
                     const NMultiplicative *_multiplicate)
-      : additive(_additive), oprt(std::move(_oprt)),
-        multiplicate(_multiplicate) {}
+      : additive(_additive), oprt((_oprt)), multiplicate(_multiplicate) {}
   void gen() const override;
   void show_ast() const override;
 };
@@ -168,11 +172,34 @@ public:
   void gen() const override {}
   void show_ast() const override{};
 };
-class NExpressionLogicalOr : public NExpression {
+class NExpressionAssign : public NExpression {
+public:
+  const NAssign *const assignment;
+  NExpressionAssign(const NAssign *const assignment) : assignment(assignment) {}
+  void gen() const override;
+  void show_ast() const override;
+};
+// assign
+class NAssign : public Node {
+public:
+  void gen() const override{};
+  void show_ast() const override{};
+};
+
+class NAssignLogicOr : public NAssign {
 public:
   const NLogicalOr *const logical_or;
-  explicit NExpressionLogicalOr(const NLogicalOr *const _logical_or)
+  explicit NAssignLogicOr(const NLogicalOr *const _logical_or)
       : logical_or(_logical_or){};
+  void gen() const override;
+  void show_ast() const override;
+};
+class NAssignAssign : public NAssign {
+public:
+  std::string id;
+  const NExpression *const expr;
+  explicit NAssignAssign(std::string &id, const NExpression *const expr)
+      : id(id), expr(expr){};
   void gen() const override;
   void show_ast() const override;
 };
@@ -244,7 +271,7 @@ public:
   const NRelational *const r;
   NEqualityBinary(const NEquality *const l, std::string _oprt,
                   const NRelational *const r)
-      : l(l), _oprt(std::move(_oprt)), r(r){};
+      : l(l), _oprt((_oprt)), r(r){};
   void gen() const override;
   void show_ast() const override;
 };
@@ -268,7 +295,7 @@ public:
   const NAdditive *const r;
   NRelationalBinary(const NRelational *const l, const std::string _oprt,
                     const NAdditive *const r)
-      : l(l), _oprt(std::move(_oprt)), r(r){};
+      : l(l), _oprt((_oprt)), r(r){};
   void gen() const override;
   void show_ast() const override;
 };
@@ -278,9 +305,27 @@ public:
   void gen() const override{};
   void show_ast() const override{};
 };
-// class NUnaryBase : public Node{
-//     public:
-// };
+class NPrimaryId : public NPrimary {
+public:
+  std::string id;
+  explicit NPrimaryId(std::string &id) : id(id) {}
+  void gen() const override;
+  void show_ast() const override;
+};
+class NInteger : public NPrimary {
+public:
+  long long value;
+  NInteger(long long _value) : value(_value){};
+  void gen() const override;
+  void show_ast() const override;
+};
+class NPrimaryExpression : public NPrimary {
+public:
+  const NExpression &exp;
+  explicit NPrimaryExpression(const NExpression &_exp) : exp(_exp) {}
+  void gen() const override;
+  void show_ast() const override;
+};
 
 class NUnary : public Node {
 public:
@@ -300,21 +345,7 @@ public:
   const std::string oprt;
   const NUnary &unary;
   NUnaryWithOperator(std::string _oprt, const NUnary &_unary)
-      : oprt(std::move(_oprt)), unary(_unary){};
-  void gen() const override;
-  void show_ast() const override;
-};
-class NInteger : public NPrimary {
-public:
-  long long value;
-  NInteger(long long _value) : value(_value){};
-  void gen() const override;
-  void show_ast() const override;
-};
-class NPrimaryExpression : public NPrimary {
-public:
-  const NExpression &exp;
-  explicit NPrimaryExpression(const NExpression &_exp) : exp(_exp) {}
+      : oprt((_oprt)), unary(_unary){};
   void gen() const override;
   void show_ast() const override;
 };
@@ -322,7 +353,7 @@ public:
 class NIdentifier : public Node {
 public:
   std::string name;
-  NIdentifier(const std::string _name) : name(std::move(_name)) {}
+  NIdentifier(const std::string _name) : name((_name)) {}
   void gen() const override;
   void show_ast() const override;
 };

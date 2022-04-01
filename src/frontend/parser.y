@@ -1,16 +1,18 @@
 %{
     #include "../../include/node.h"
-    #include <vector.h>
+    #include <vector>
     NProgram *programBlock;
     extern int yyline;
     extern int yylex();
     void yyerror(const char*s){printf("ERROR:Line:%d\n%s\n",yyline,s);}
     void insertVarible(std::string& type,std::string& id);
+void insertFunction(std::string& type,std::string& id);
 %}
 
 %union{
 NStatement                *stmt;
 NStatements               *stmts;
+NAssign               *assignment;
 NExpression               *expr;
 NLogicalOr                *logical_or;
 NLogicalAnd               *logical_and;
@@ -42,6 +44,7 @@ int                       token;
 %type <type>           type
 %type <stmt>           statement
 %type <stmts>          statements
+%type <assignment>     assignment
 %type <func_decl>      function
 %type <program>        program
 %type <additive>       additive
@@ -60,21 +63,26 @@ program
     : function {programBlock = new NProgram(*$1);}
         ;
 function
-    : type TIDENTIFIER TLPAREN TRPAREN TLBPAREN statements TRBPAREN {$$=new NFunctionDeclaration(*$1,*$2,*$6);}
+    : type TIDENTIFIER TLPAREN TRPAREN TLBPAREN statements TRBPAREN {
+        $$=new NFunctionDeclaration(*$1,*$2,$6);
+        insertFunction($1->name,*$2);
+        }
 ;
-statements:
-     : statement {$$ = new NStatements(); $$->stmts.push($1);}
-     | statements statement {$1->stmts.push($2);$$=$1;}
+statements
+     : statement {$$ = new NStatements(); $$->stmts.push_back($1);}
+     | statements statement {$1->stmts.push_back($2);$$=$1;}
      ;
 statement
    : TRETURN expression TSEMICOLOM {$$ = new NReturnStatement(*$2);}
-   | TSEMICOLOM
-   | expression TSEMICOLOM{$$ = new NStatementExpr($2);}
+   | TSEMICOLOM {$$ = new NStatementNull();}
+   | expression TSEMICOLOM{$$ = new NStatementExpr($1);}
    | declaration {$$= new NStatementDeclaration($1);}
 ;
 declaration
-    : type TIDENTIFIER TASSIGN expression  TSEMICOLOM
-    | type TIDENTIFIER TSEMICOLOM {insertVarible(*$1,*$2){
+    : type TIDENTIFIER TSEMICOLOM {insertVarible($1->name,*$2);$$=nullptr;}
+    | type TIDENTIFIER TASSIGN expression  TSEMICOLOM{
+        insertVarible($1->name,*$2);
+        $$ = new NDeclarationWithAssign(*$2,$4);
     }
     ;
 
@@ -83,11 +91,11 @@ type
 ;
 
 expression
-    : assignment
+    : assignment{$$ = new  NExpressionAssign($1);}
     ;
 assignment
-    : logical_or {$$=new NExpressionLogicalOr($1);}
-    | TIDENTIFIER TASSIGN expression
+    : logical_or {$$=new NAssignLogicOr($1);}
+    | TIDENTIFIER TASSIGN expression {$$=new NAssignAssign(*$1,$3);}
     ;
 
 logical_or 
@@ -146,7 +154,8 @@ multiplicative
                 std::string("%"),
                 *$3
         );}
-; unary
+;
+unary
     : primary{$$=new NUnaryPrimary(*$1);}
     | TMINUS unary {$$ = new NUnaryWithOperator(std::string("-"),*$2);}
     | TNOT unary {$$ = new NUnaryWithOperator(std::string("!"),*$2);}
@@ -156,9 +165,15 @@ multiplicative
 primary
     : TINTEGER {$$=new NInteger(atoi($1->c_str()));delete $1;}
     | TLPAREN expression TRPAREN {$$ = new NPrimaryExpression(*$2);}
-    | TIDENTIFIER
+    | TIDENTIFIER {$$ = new NPrimaryId(*$1);}
     ;
 %%
 void insertVarible(std::string& type,std::string& id){
-    VaribleTable.insert(make_pair<std::string, VaribleInfo>(std::string(id),VaribleInfo(id)));
+    VaribleTable.insert(std::make_pair<std::string, VaribleInfo>(std::string(id),VaribleInfo(type)));
+}
+void insertFunction(std::string& type,std::string& id){
+    FunctionTable.insert(
+        std::make_pair<std::string, FunctionInfo>
+            (std::string(id),FunctionInfo(type,VaribleTable)));
+    VaribleTable.clear();
 }

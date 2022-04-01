@@ -1,6 +1,6 @@
-#line 2 "src/frontend/token.cpp"
+#line 1 "src/frontend/token.cpp"
 
-#line 4 "src/frontend/token.cpp"
+#line 3 "src/frontend/token.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -374,8 +374,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 27
-#define YY_END_OF_BUFFER 28
+#define YY_NUM_RULES 28
+#define YY_END_OF_BUFFER 29
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -385,9 +385,9 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[44] =
     {   0,
-        0,    0,   28,   27,    1,    2,   13,   18,   27,    8,
+        0,    0,   29,   28,    1,    2,   13,   18,   28,    8,
         9,   17,   15,   12,   16,    3,    7,   19,   27,   21,
-        6,    6,    6,   10,   27,   11,   14,   23,   25,    3,
+        6,    6,    6,   10,   28,   11,   14,   23,   25,    3,
        20,   24,   22,    6,    6,    6,   26,    5,    6,    6,
         6,    4,    0
     } ;
@@ -474,10 +474,10 @@ static const flex_int16_t yy_chk[75] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[28] =
+static const flex_int32_t yy_rule_can_match_eol[29] =
     {   0,
 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0, 0, 0, 0, 0, 0, 0,     };
+    0, 0, 0, 0, 0, 0, 0, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -504,8 +504,8 @@ extern int yyline;
 
 #define SAVE_TOKEN yylval.string = new std::string(yytext,yyleng)
 #define TOKEN(t) (yylval.token=t)
+#line 507 "src/frontend/token.cpp"
 #line 508 "src/frontend/token.cpp"
-#line 509 "src/frontend/token.cpp"
 
 #define INITIAL 0
 
@@ -725,7 +725,7 @@ YY_DECL
 #line 15 "src/frontend/token.l"
 
 
-#line 729 "src/frontend/token.cpp"
+#line 728 "src/frontend/token.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -923,16 +923,21 @@ YY_RULE_SETUP
 #line 47 "src/frontend/token.l"
 {return TOKEN(TLOGOR);}
 	YY_BREAK
-case YY_STATE_EOF(INITIAL):
-#line 48 "src/frontend/token.l"
-{yyterminate();}
-	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 49 "src/frontend/token.l"
+{return TOKEN(TASSIGN);}
+	YY_BREAK
+case YY_STATE_EOF(INITIAL):
+#line 50 "src/frontend/token.l"
+{yyterminate();}
+	YY_BREAK
+case 28:
+YY_RULE_SETUP
+#line 51 "src/frontend/token.l"
 ECHO;
 	YY_BREAK
-#line 936 "src/frontend/token.cpp"
+#line 940 "src/frontend/token.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1947,6 +1952,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 49 "src/frontend/token.l"
+#line 51 "src/frontend/token.l"
 
 

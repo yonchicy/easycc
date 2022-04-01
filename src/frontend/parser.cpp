@@ -70,12 +70,15 @@
 #line 1 "src/frontend/parser.y"
 
     #include "../../include/node.h"
+    #include <vector>
     NProgram *programBlock;
     extern int yyline;
     extern int yylex();
     void yyerror(const char*s){printf("ERROR:Line:%d\n%s\n",yyline,s);}
+    void insertVarible(std::string& type,std::string& id);
+void insertFunction(std::string& type,std::string& id);
 
-#line 79 "src/frontend/parser.cpp"
+#line 82 "src/frontend/parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -131,20 +134,24 @@ enum yysymbol_kind_t
   YYSYMBOL_TE = 25,                        /* TE  */
   YYSYMBOL_TLOGAND = 26,                   /* TLOGAND  */
   YYSYMBOL_TLOGOR = 27,                    /* TLOGOR  */
-  YYSYMBOL_YYACCEPT = 28,                  /* $accept  */
-  YYSYMBOL_program = 29,                   /* program  */
-  YYSYMBOL_function = 30,                  /* function  */
-  YYSYMBOL_type = 31,                      /* type  */
-  YYSYMBOL_statement = 32,                 /* statement  */
-  YYSYMBOL_expression = 33,                /* expression  */
-  YYSYMBOL_logical_or = 34,                /* logical_or  */
-  YYSYMBOL_logical_and = 35,               /* logical_and  */
-  YYSYMBOL_equality = 36,                  /* equality  */
-  YYSYMBOL_relational = 37,                /* relational  */
-  YYSYMBOL_additive = 38,                  /* additive  */
-  YYSYMBOL_multiplicative = 39,            /* multiplicative  */
-  YYSYMBOL_unary = 40,                     /* unary  */
-  YYSYMBOL_primary = 41                    /* primary  */
+  YYSYMBOL_TASSIGN = 28,                   /* TASSIGN  */
+  YYSYMBOL_YYACCEPT = 29,                  /* $accept  */
+  YYSYMBOL_program = 30,                   /* program  */
+  YYSYMBOL_function = 31,                  /* function  */
+  YYSYMBOL_statements = 32,                /* statements  */
+  YYSYMBOL_statement = 33,                 /* statement  */
+  YYSYMBOL_declaration = 34,               /* declaration  */
+  YYSYMBOL_type = 35,                      /* type  */
+  YYSYMBOL_expression = 36,                /* expression  */
+  YYSYMBOL_assignment = 37,                /* assignment  */
+  YYSYMBOL_logical_or = 38,                /* logical_or  */
+  YYSYMBOL_logical_and = 39,               /* logical_and  */
+  YYSYMBOL_equality = 40,                  /* equality  */
+  YYSYMBOL_relational = 41,                /* relational  */
+  YYSYMBOL_additive = 42,                  /* additive  */
+  YYSYMBOL_multiplicative = 43,            /* multiplicative  */
+  YYSYMBOL_unary = 44,                     /* unary  */
+  YYSYMBOL_primary = 45                    /* primary  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -472,19 +479,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   47
+#define YYLAST   79
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  28
+#define YYNTOKENS  29
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  14
+#define YYNNTS  17
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  31
+#define YYNRULES  41
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  59
+#define YYNSTATES  76
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   282
+#define YYMAXUTOK   283
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -526,17 +533,18 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27
+      25,    26,    27,    28
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    53,    53,    56,    59,    62,    66,    70,    71,    76,
-      77,    80,    81,    82,    85,    86,    87,    88,    89,    93,
-      94,    99,   106,   107,   113,   119,   127,   128,   129,   130,
-     134,   135
+       0,    63,    63,    66,    72,    73,    76,    77,    78,    79,
+      82,    83,    90,    94,    97,    98,   102,   103,   108,   109,
+     112,   113,   114,   117,   118,   119,   120,   121,   125,   126,
+     131,   138,   139,   145,   151,   159,   160,   161,   162,   166,
+     167,   168
 };
 #endif
 
@@ -556,9 +564,10 @@ static const char *const yytname[] =
   "TINTEGER", "TSEMICOLOM", "TMAIN", "TINT", "TRETURN", "TLPAREN",
   "TRPAREN", "TLBPAREN", "TRBPAREN", "TMINUS", "TNOT", "TWAVE", "TPLUS",
   "TDIV", "TMOD", "TMULTI", "TL", "TLE", "TG", "TGE", "TNE", "TE",
-  "TLOGAND", "TLOGOR", "$accept", "program", "function", "type",
-  "statement", "expression", "logical_or", "logical_and", "equality",
-  "relational", "additive", "multiplicative", "unary", "primary", YY_NULLPTR
+  "TLOGAND", "TLOGOR", "TASSIGN", "$accept", "program", "function",
+  "statements", "statement", "declaration", "type", "expression",
+  "assignment", "logical_or", "logical_and", "equality", "relational",
+  "additive", "multiplicative", "unary", "primary", YY_NULLPTR
 };
 
 static const char *
@@ -568,7 +577,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-22)
+#define YYPACT_NINF (-26)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -582,12 +591,14 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      20,   -22,    31,   -22,    29,   -22,    24,    25,    23,    28,
-      -1,    26,   -22,    -1,    -1,    -1,    -1,    32,    12,    14,
-      -4,   -16,     6,    -8,   -22,   -22,   -22,    33,   -22,   -22,
-     -22,   -22,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,   -22,    14,    -4,   -16,   -16,
-       6,     6,     6,     6,    -8,    -8,   -22,   -22,   -22
+       2,   -26,    52,   -26,    50,   -26,    45,    56,    57,    19,
+      39,   -26,   -26,    35,    35,    42,    42,    42,     3,   -26,
+     -26,    66,    65,   -26,    44,    46,   -11,    38,    24,    12,
+     -26,   -26,    35,    68,    64,   -26,   -26,   -26,   -26,   -26,
+     -26,    -3,   -26,    42,    42,    42,    42,    42,    42,    42,
+      42,    42,    42,    42,    42,    42,   -26,   -26,   -26,   -26,
+      35,    46,   -11,    38,    38,    24,    24,    24,    24,    12,
+      12,   -26,   -26,   -26,    70,   -26
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -595,26 +606,28 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     4,     0,     2,     0,     1,     0,     0,     0,     0,
-       0,     0,    30,     0,     0,     0,     0,     0,     6,     7,
-       9,    11,    14,    19,    22,    26,     3,     0,    27,    28,
-      29,     5,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,    31,     8,    10,    13,    12,
-      15,    16,    17,    18,    21,    20,    24,    25,    23
+       0,    12,     0,     2,     0,     1,     0,     0,     0,     0,
+      41,    39,     7,     0,     0,     0,     0,     0,     0,     4,
+       9,     0,     0,    13,    14,    16,    18,    20,    23,    28,
+      31,    35,     0,     0,     0,    41,    36,    37,    38,     3,
+       5,     0,     8,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    15,     6,    40,    10,
+       0,    17,    19,    22,    21,    24,    25,    26,    27,    30,
+      29,    33,    34,    32,     0,    11
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -22,   -22,   -22,   -22,   -22,    34,   -22,     9,    11,   -11,
-     -21,   -15,   -14,   -22
+     -26,   -26,   -26,   -26,    58,   -26,    77,   -13,   -26,   -26,
+      36,    34,   -25,    15,   -16,   -12,   -26
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,     3,     4,    11,    17,    18,    19,    20,    21,
-      22,    23,    24,    25
+       0,     2,     3,    18,    19,    20,    21,    22,    23,    24,
+      25,    26,    27,    28,    29,    30,    31
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -622,50 +635,60 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      28,    29,    30,    12,    36,    37,    38,    39,    13,    42,
-      43,    44,    14,    15,    16,    50,    51,    52,    53,    40,
-      34,    35,    41,    48,    49,    54,    55,     1,    56,    57,
-      58,     5,     6,     7,     9,     8,    10,    31,    26,    32,
-      33,    46,     0,    45,    47,     0,     0,    27
+      33,    34,    59,    36,    37,    38,    10,    11,    12,     1,
+       1,    13,    14,    45,    46,    39,    15,    16,    17,    56,
+      63,    64,    10,    11,    12,    60,     1,    13,    14,    53,
+      54,    55,    15,    16,    17,    69,    70,    51,    10,    11,
+      52,    71,    72,    73,    14,    35,    11,    74,    15,    16,
+      17,    14,     5,     6,     7,    15,    16,    17,    47,    48,
+      49,    50,    65,    66,    67,    68,     8,    32,     9,    41,
+      42,    43,    44,    57,    58,    75,    40,     4,    62,    61
 };
 
 static const yytype_int8 yycheck[] =
 {
-      14,    15,    16,     4,    20,    21,    22,    23,     9,    17,
-      18,    19,    13,    14,    15,    36,    37,    38,    39,    13,
-      24,    25,    16,    34,    35,    40,    41,     7,    42,    43,
-      44,     0,     3,     9,    11,    10,     8,     5,    12,    27,
-      26,    32,    -1,    10,    33,    -1,    -1,    13
+      13,    14,     5,    15,    16,    17,     3,     4,     5,     7,
+       7,     8,     9,    24,    25,    12,    13,    14,    15,    32,
+      45,    46,     3,     4,     5,    28,     7,     8,     9,    17,
+      18,    19,    13,    14,    15,    51,    52,    13,     3,     4,
+      16,    53,    54,    55,     9,     3,     4,    60,    13,    14,
+      15,     9,     0,     3,     9,    13,    14,    15,    20,    21,
+      22,    23,    47,    48,    49,    50,    10,    28,    11,     3,
+       5,    27,    26,     5,    10,     5,    18,     0,    44,    43
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     7,    29,    30,    31,     0,     3,     9,    10,    11,
-       8,    32,     4,     9,    13,    14,    15,    33,    34,    35,
-      36,    37,    38,    39,    40,    41,    12,    33,    40,    40,
-      40,     5,    27,    26,    24,    25,    20,    21,    22,    23,
-      13,    16,    17,    18,    19,    10,    35,    36,    37,    37,
-      38,    38,    38,    38,    39,    39,    40,    40,    40
+       0,     7,    30,    31,    35,     0,     3,     9,    10,    11,
+       3,     4,     5,     8,     9,    13,    14,    15,    32,    33,
+      34,    35,    36,    37,    38,    39,    40,    41,    42,    43,
+      44,    45,    28,    36,    36,     3,    44,    44,    44,    12,
+      33,     3,     5,    27,    26,    24,    25,    20,    21,    22,
+      23,    13,    16,    17,    18,    19,    36,     5,    10,     5,
+      28,    39,    40,    41,    41,    42,    42,    42,    42,    43,
+      43,    44,    44,    44,    36,     5
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    28,    29,    30,    31,    32,    33,    34,    34,    35,
-      35,    36,    36,    36,    37,    37,    37,    37,    37,    38,
-      38,    38,    39,    39,    39,    39,    40,    40,    40,    40,
-      41,    41
+       0,    29,    30,    31,    32,    32,    33,    33,    33,    33,
+      34,    34,    35,    36,    37,    37,    38,    38,    39,    39,
+      40,    40,    40,    41,    41,    41,    41,    41,    42,    42,
+      42,    43,    43,    43,    43,    44,    44,    44,    44,    45,
+      45,    45
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     7,     1,     3,     1,     1,     3,     1,
-       3,     1,     3,     3,     1,     3,     3,     3,     3,     1,
-       3,     3,     1,     3,     3,     3,     1,     2,     2,     2,
-       1,     3
+       0,     2,     1,     7,     1,     2,     3,     1,     2,     1,
+       3,     5,     1,     1,     1,     3,     1,     3,     1,     3,
+       1,     3,     3,     1,     3,     3,     3,     3,     1,     3,
+       3,     1,     3,     3,     3,     1,     2,     2,     2,     1,
+       3,     1
 };
 
 
@@ -1129,205 +1152,271 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: function  */
-#line 53 "src/frontend/parser.y"
+#line 63 "src/frontend/parser.y"
                {programBlock = new NProgram(*(yyvsp[0].func_decl));}
-#line 1135 "src/frontend/parser.cpp"
+#line 1158 "src/frontend/parser.cpp"
     break;
 
-  case 3: /* function: type TIDENTIFIER TLPAREN TRPAREN TLBPAREN statement TRBPAREN  */
-#line 56 "src/frontend/parser.y"
-                                                                   {(yyval.func_decl)=new NFunctionDeclaration(*(yyvsp[-6].type),*(yyvsp[-5].string),*(yyvsp[-1].stmt));}
-#line 1141 "src/frontend/parser.cpp"
-    break;
-
-  case 4: /* type: TINT  */
-#line 59 "src/frontend/parser.y"
-           {(yyval.type)=new NType(std::string("int"));}
-#line 1147 "src/frontend/parser.cpp"
-    break;
-
-  case 5: /* statement: TRETURN expression TSEMICOLOM  */
-#line 62 "src/frontend/parser.y"
-                                   {(yyval.stmt) = new NReturnStatement(*(yyvsp[-1].expr));}
-#line 1153 "src/frontend/parser.cpp"
-    break;
-
-  case 6: /* expression: logical_or  */
+  case 3: /* function: type TIDENTIFIER TLPAREN TRPAREN TLBPAREN statements TRBPAREN  */
 #line 66 "src/frontend/parser.y"
-                 {(yyval.expr)=new NExpressionLogicalOr((yyvsp[0].logical_or));}
-#line 1159 "src/frontend/parser.cpp"
+                                                                    {
+        (yyval.func_decl)=new NFunctionDeclaration(*(yyvsp[-6].type),*(yyvsp[-5].string),(yyvsp[-1].stmts));
+        insertFunction((yyvsp[-6].type)->name,*(yyvsp[-5].string));
+        }
+#line 1167 "src/frontend/parser.cpp"
     break;
 
-  case 7: /* logical_or: logical_and  */
-#line 70 "src/frontend/parser.y"
-                 {(yyval.logical_or)=new NLogicalOrAnd((yyvsp[0].logical_and));}
-#line 1165 "src/frontend/parser.cpp"
+  case 4: /* statements: statement  */
+#line 72 "src/frontend/parser.y"
+                 {(yyval.stmts) = new NStatements(); (yyval.stmts)->stmts.push_back((yyvsp[0].stmt));}
+#line 1173 "src/frontend/parser.cpp"
     break;
 
-  case 8: /* logical_or: logical_or TLOGOR logical_and  */
-#line 71 "src/frontend/parser.y"
-                                    {(yyval.logical_or)=new NLogicalORBinary((yyvsp[-2].logical_or),(yyvsp[0].logical_and));}
-#line 1171 "src/frontend/parser.cpp"
+  case 5: /* statements: statements statement  */
+#line 73 "src/frontend/parser.y"
+                            {(yyvsp[-1].stmts)->stmts.push_back((yyvsp[0].stmt));(yyval.stmts)=(yyvsp[-1].stmts);}
+#line 1179 "src/frontend/parser.cpp"
     break;
 
-  case 9: /* logical_and: equality  */
+  case 6: /* statement: TRETURN expression TSEMICOLOM  */
 #line 76 "src/frontend/parser.y"
-               {(yyval.logical_and)=new NLogicalAndEquality((yyvsp[0].equality));}
-#line 1177 "src/frontend/parser.cpp"
+                                   {(yyval.stmt) = new NReturnStatement(*(yyvsp[-1].expr));}
+#line 1185 "src/frontend/parser.cpp"
     break;
 
-  case 10: /* logical_and: logical_and TLOGAND equality  */
+  case 7: /* statement: TSEMICOLOM  */
 #line 77 "src/frontend/parser.y"
-                                  {(yyval.logical_and)=new NLogicalAndBinary((yyvsp[-2].logical_and),(yyvsp[0].equality));}
-#line 1183 "src/frontend/parser.cpp"
+                {(yyval.stmt) = new NStatementNull();}
+#line 1191 "src/frontend/parser.cpp"
     break;
 
-  case 11: /* equality: relational  */
-#line 80 "src/frontend/parser.y"
-                 {(yyval.equality)=new NEqualityRelational((yyvsp[0].relational));}
-#line 1189 "src/frontend/parser.cpp"
+  case 8: /* statement: expression TSEMICOLOM  */
+#line 78 "src/frontend/parser.y"
+                          {(yyval.stmt) = new NStatementExpr((yyvsp[-1].expr));}
+#line 1197 "src/frontend/parser.cpp"
     break;
 
-  case 12: /* equality: equality TE relational  */
-#line 81 "src/frontend/parser.y"
-                            {(yyval.equality)=new NEqualityBinary((yyvsp[-2].equality),std::string("=="),(yyvsp[0].relational));}
-#line 1195 "src/frontend/parser.cpp"
+  case 9: /* statement: declaration  */
+#line 79 "src/frontend/parser.y"
+                 {(yyval.stmt)= new NStatementDeclaration((yyvsp[0].declaration));}
+#line 1203 "src/frontend/parser.cpp"
     break;
 
-  case 13: /* equality: equality TNE relational  */
+  case 10: /* declaration: type TIDENTIFIER TSEMICOLOM  */
 #line 82 "src/frontend/parser.y"
+                                  {insertVarible((yyvsp[-2].type)->name,*(yyvsp[-1].string));(yyval.declaration)=nullptr;}
+#line 1209 "src/frontend/parser.cpp"
+    break;
+
+  case 11: /* declaration: type TIDENTIFIER TASSIGN expression TSEMICOLOM  */
+#line 83 "src/frontend/parser.y"
+                                                     {
+        insertVarible((yyvsp[-4].type)->name,*(yyvsp[-3].string));
+        (yyval.declaration) = new NDeclarationWithAssign(*(yyvsp[-3].string),(yyvsp[-1].expr));
+    }
+#line 1218 "src/frontend/parser.cpp"
+    break;
+
+  case 12: /* type: TINT  */
+#line 90 "src/frontend/parser.y"
+           {(yyval.type)=new NType(std::string("int"));}
+#line 1224 "src/frontend/parser.cpp"
+    break;
+
+  case 13: /* expression: assignment  */
+#line 94 "src/frontend/parser.y"
+                {(yyval.expr) = new  NExpressionAssign((yyvsp[0].assignment));}
+#line 1230 "src/frontend/parser.cpp"
+    break;
+
+  case 14: /* assignment: logical_or  */
+#line 97 "src/frontend/parser.y"
+                 {(yyval.assignment)=new NAssignLogicOr((yyvsp[0].logical_or));}
+#line 1236 "src/frontend/parser.cpp"
+    break;
+
+  case 15: /* assignment: TIDENTIFIER TASSIGN expression  */
+#line 98 "src/frontend/parser.y"
+                                     {(yyval.assignment)=new NAssignAssign(*(yyvsp[-2].string),(yyvsp[0].expr));}
+#line 1242 "src/frontend/parser.cpp"
+    break;
+
+  case 16: /* logical_or: logical_and  */
+#line 102 "src/frontend/parser.y"
+                 {(yyval.logical_or)=new NLogicalOrAnd((yyvsp[0].logical_and));}
+#line 1248 "src/frontend/parser.cpp"
+    break;
+
+  case 17: /* logical_or: logical_or TLOGOR logical_and  */
+#line 103 "src/frontend/parser.y"
+                                    {(yyval.logical_or)=new NLogicalORBinary((yyvsp[-2].logical_or),(yyvsp[0].logical_and));}
+#line 1254 "src/frontend/parser.cpp"
+    break;
+
+  case 18: /* logical_and: equality  */
+#line 108 "src/frontend/parser.y"
+               {(yyval.logical_and)=new NLogicalAndEquality((yyvsp[0].equality));}
+#line 1260 "src/frontend/parser.cpp"
+    break;
+
+  case 19: /* logical_and: logical_and TLOGAND equality  */
+#line 109 "src/frontend/parser.y"
+                                  {(yyval.logical_and)=new NLogicalAndBinary((yyvsp[-2].logical_and),(yyvsp[0].equality));}
+#line 1266 "src/frontend/parser.cpp"
+    break;
+
+  case 20: /* equality: relational  */
+#line 112 "src/frontend/parser.y"
+                 {(yyval.equality)=new NEqualityRelational((yyvsp[0].relational));}
+#line 1272 "src/frontend/parser.cpp"
+    break;
+
+  case 21: /* equality: equality TE relational  */
+#line 113 "src/frontend/parser.y"
+                            {(yyval.equality)=new NEqualityBinary((yyvsp[-2].equality),std::string("=="),(yyvsp[0].relational));}
+#line 1278 "src/frontend/parser.cpp"
+    break;
+
+  case 22: /* equality: equality TNE relational  */
+#line 114 "src/frontend/parser.y"
                               {(yyval.equality)=new NEqualityBinary((yyvsp[-2].equality),std::string("!="),(yyvsp[0].relational));}
-#line 1201 "src/frontend/parser.cpp"
+#line 1284 "src/frontend/parser.cpp"
     break;
 
-  case 14: /* relational: additive  */
-#line 85 "src/frontend/parser.y"
+  case 23: /* relational: additive  */
+#line 117 "src/frontend/parser.y"
               {(yyval.relational) = new NRelationalAdditive((yyvsp[0].additive));}
-#line 1207 "src/frontend/parser.cpp"
+#line 1290 "src/frontend/parser.cpp"
     break;
 
-  case 15: /* relational: relational TL additive  */
-#line 86 "src/frontend/parser.y"
+  case 24: /* relational: relational TL additive  */
+#line 118 "src/frontend/parser.y"
                             {(yyval.relational) = new NRelationalBinary((yyvsp[-2].relational),std::string("<"),(yyvsp[0].additive));}
-#line 1213 "src/frontend/parser.cpp"
+#line 1296 "src/frontend/parser.cpp"
     break;
 
-  case 16: /* relational: relational TLE additive  */
-#line 87 "src/frontend/parser.y"
+  case 25: /* relational: relational TLE additive  */
+#line 119 "src/frontend/parser.y"
                              {(yyval.relational) = new NRelationalBinary((yyvsp[-2].relational),std::string("<="),(yyvsp[0].additive));}
-#line 1219 "src/frontend/parser.cpp"
+#line 1302 "src/frontend/parser.cpp"
     break;
 
-  case 17: /* relational: relational TG additive  */
-#line 88 "src/frontend/parser.y"
+  case 26: /* relational: relational TG additive  */
+#line 120 "src/frontend/parser.y"
                             {(yyval.relational) = new NRelationalBinary((yyvsp[-2].relational),std::string(">"),(yyvsp[0].additive));}
-#line 1225 "src/frontend/parser.cpp"
+#line 1308 "src/frontend/parser.cpp"
     break;
 
-  case 18: /* relational: relational TGE additive  */
-#line 89 "src/frontend/parser.y"
+  case 27: /* relational: relational TGE additive  */
+#line 121 "src/frontend/parser.y"
                              {(yyval.relational) = new NRelationalBinary((yyvsp[-2].relational),std::string(">="),(yyvsp[0].additive));}
-#line 1231 "src/frontend/parser.cpp"
+#line 1314 "src/frontend/parser.cpp"
     break;
 
-  case 19: /* additive: multiplicative  */
-#line 93 "src/frontend/parser.y"
+  case 28: /* additive: multiplicative  */
+#line 125 "src/frontend/parser.y"
                      {(yyval.additive) = new NAdditiveMultipicative(*(yyvsp[0].multiplicative));}
-#line 1237 "src/frontend/parser.cpp"
+#line 1320 "src/frontend/parser.cpp"
     break;
 
-  case 20: /* additive: additive TPLUS multiplicative  */
-#line 95 "src/frontend/parser.y"
+  case 29: /* additive: additive TPLUS multiplicative  */
+#line 127 "src/frontend/parser.y"
         {(yyval.additive)=new NAddtiveOprtMulti(
             *(yyvsp[-2].additive),
             std::string("+"),
             (yyvsp[0].multiplicative));}
-#line 1246 "src/frontend/parser.cpp"
+#line 1329 "src/frontend/parser.cpp"
     break;
 
-  case 21: /* additive: additive TMINUS multiplicative  */
-#line 100 "src/frontend/parser.y"
+  case 30: /* additive: additive TMINUS multiplicative  */
+#line 132 "src/frontend/parser.y"
         {(yyval.additive)=new NAddtiveOprtMulti(
             *(yyvsp[-2].additive),
             std::string("-"),
             (yyvsp[0].multiplicative));}
-#line 1255 "src/frontend/parser.cpp"
+#line 1338 "src/frontend/parser.cpp"
     break;
 
-  case 22: /* multiplicative: unary  */
-#line 106 "src/frontend/parser.y"
+  case 31: /* multiplicative: unary  */
+#line 138 "src/frontend/parser.y"
            {(yyval.multiplicative)=new NMultiplicativeUnary(*(yyvsp[0].unary));}
-#line 1261 "src/frontend/parser.cpp"
+#line 1344 "src/frontend/parser.cpp"
     break;
 
-  case 23: /* multiplicative: multiplicative TMULTI unary  */
-#line 108 "src/frontend/parser.y"
+  case 32: /* multiplicative: multiplicative TMULTI unary  */
+#line 140 "src/frontend/parser.y"
         {(yyval.multiplicative)=new NMultiplicativeOprtUnary(
                 *(yyvsp[-2].multiplicative),
                 std::string("*"),
                 *(yyvsp[0].unary)
         );}
-#line 1271 "src/frontend/parser.cpp"
+#line 1354 "src/frontend/parser.cpp"
     break;
 
-  case 24: /* multiplicative: multiplicative TDIV unary  */
-#line 114 "src/frontend/parser.y"
+  case 33: /* multiplicative: multiplicative TDIV unary  */
+#line 146 "src/frontend/parser.y"
         {(yyval.multiplicative)=new NMultiplicativeOprtUnary(
                 *(yyvsp[-2].multiplicative),
                 std::string("/"),
                 *(yyvsp[0].unary)
         );}
-#line 1281 "src/frontend/parser.cpp"
+#line 1364 "src/frontend/parser.cpp"
     break;
 
-  case 25: /* multiplicative: multiplicative TMOD unary  */
-#line 120 "src/frontend/parser.y"
+  case 34: /* multiplicative: multiplicative TMOD unary  */
+#line 152 "src/frontend/parser.y"
         {(yyval.multiplicative)=new NMultiplicativeOprtUnary(
                 *(yyvsp[-2].multiplicative),
                 std::string("%"),
                 *(yyvsp[0].unary)
         );}
-#line 1291 "src/frontend/parser.cpp"
+#line 1374 "src/frontend/parser.cpp"
     break;
 
-  case 26: /* unary: primary  */
-#line 127 "src/frontend/parser.y"
+  case 35: /* unary: primary  */
+#line 159 "src/frontend/parser.y"
              {(yyval.unary)=new NUnaryPrimary(*(yyvsp[0].primary));}
-#line 1297 "src/frontend/parser.cpp"
+#line 1380 "src/frontend/parser.cpp"
     break;
 
-  case 27: /* unary: TMINUS unary  */
-#line 128 "src/frontend/parser.y"
+  case 36: /* unary: TMINUS unary  */
+#line 160 "src/frontend/parser.y"
                    {(yyval.unary) = new NUnaryWithOperator(std::string("-"),*(yyvsp[0].unary));}
-#line 1303 "src/frontend/parser.cpp"
+#line 1386 "src/frontend/parser.cpp"
     break;
 
-  case 28: /* unary: TNOT unary  */
-#line 129 "src/frontend/parser.y"
+  case 37: /* unary: TNOT unary  */
+#line 161 "src/frontend/parser.y"
                  {(yyval.unary) = new NUnaryWithOperator(std::string("!"),*(yyvsp[0].unary));}
-#line 1309 "src/frontend/parser.cpp"
+#line 1392 "src/frontend/parser.cpp"
     break;
 
-  case 29: /* unary: TWAVE unary  */
-#line 130 "src/frontend/parser.y"
+  case 38: /* unary: TWAVE unary  */
+#line 162 "src/frontend/parser.y"
                   {(yyval.unary) = new NUnaryWithOperator(std::string("~"),*(yyvsp[0].unary));}
-#line 1315 "src/frontend/parser.cpp"
+#line 1398 "src/frontend/parser.cpp"
     break;
 
-  case 30: /* primary: TINTEGER  */
-#line 134 "src/frontend/parser.y"
+  case 39: /* primary: TINTEGER  */
+#line 166 "src/frontend/parser.y"
                {(yyval.primary)=new NInteger(atoi((yyvsp[0].string)->c_str()));delete (yyvsp[0].string);}
-#line 1321 "src/frontend/parser.cpp"
+#line 1404 "src/frontend/parser.cpp"
     break;
 
-  case 31: /* primary: TLPAREN expression TRPAREN  */
-#line 135 "src/frontend/parser.y"
+  case 40: /* primary: TLPAREN expression TRPAREN  */
+#line 167 "src/frontend/parser.y"
                                  {(yyval.primary) = new NPrimaryExpression(*(yyvsp[-1].expr));}
-#line 1327 "src/frontend/parser.cpp"
+#line 1410 "src/frontend/parser.cpp"
+    break;
+
+  case 41: /* primary: TIDENTIFIER  */
+#line 168 "src/frontend/parser.y"
+                  {(yyval.primary) = new NPrimaryId(*(yyvsp[0].string));}
+#line 1416 "src/frontend/parser.cpp"
     break;
 
 
-#line 1331 "src/frontend/parser.cpp"
+#line 1420 "src/frontend/parser.cpp"
 
       default: break;
     }
@@ -1520,5 +1609,14 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 137 "src/frontend/parser.y"
+#line 170 "src/frontend/parser.y"
 
+void insertVarible(std::string& type,std::string& id){
+    VaribleTable.insert(std::make_pair<std::string, VaribleInfo>(std::string(id),VaribleInfo(type)));
+}
+void insertFunction(std::string& type,std::string& id){
+    FunctionTable.insert(
+        std::make_pair<std::string, FunctionInfo>
+            (std::string(id),FunctionInfo(type,VaribleTable)));
+    VaribleTable.clear();
+}

@@ -78,7 +78,8 @@ extern int yydebug;
     TNE = 279,                     /* TNE  */
     TE = 280,                      /* TE  */
     TLOGAND = 281,                 /* TLOGAND  */
-    TLOGOR = 282                   /* TLOGOR  */
+    TLOGOR = 282,                  /* TLOGOR  */
+    TASSIGN = 283                  /* TASSIGN  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -87,26 +88,29 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 9 "src/frontend/parser.y"
+#line 12 "src/frontend/parser.y"
 
-NStatement           *stmt;
-NExpression          *expr;
-NLogicalOr           *logical_or;
-NLogicalAnd          *logical_and;
-NEquality            *equality;
-NRelational          *relational;
-NIdentifier          *ident;
-NFunctionDeclaration *func_decl;
-NType                *type;
-NAdditive            *additive;
-NMultiplicative      *multiplicative;
-NPrimary             *primary;
-NUnary               *unary;
-std::string          *string;
-NProgram             *program;
-int                  token;
+NStatement                *stmt;
+NStatements               *stmts;
+NAssign               *assignment;
+NExpression               *expr;
+NLogicalOr                *logical_or;
+NLogicalAnd               *logical_and;
+NEquality                 *equality;
+NRelational               *relational;
+NIdentifier               *ident;
+NFunctionDeclaration      *func_decl;
+NType                     *type;
+NAdditive                 *additive;
+NMultiplicative           *multiplicative;
+NPrimary                  *primary;
+NUnary                    *unary;
+std::string               *string;
+NProgram                  *program;
+NDeclaration              *declaration;
+int                       token;
 
-#line 110 "src/frontend/parser.hpp"
+#line 114 "src/frontend/parser.hpp"
 
 };
 typedef union YYSTYPE YYSTYPE;

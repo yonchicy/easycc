@@ -22,10 +22,32 @@ void NProgram::show_ast() const {
 void NFunctionDeclaration::show_ast() const {
   TRACE("FuncDeclaration(%s %s) stataments:\n",(this->type).name.c_str(),(this->id.c_str()));
   push_depth();
-  this->statement.show_ast();
+  this->statements->show_ast();
   pop_depth();
 }
 
+// TODO
+// statements
+void NStatements::show_ast()const{
+    for (auto &stmt : this->stmts) {
+        stmt->show_ast();
+    }
+}
+// statement
+void NStatementExpr::show_ast() const{
+    this->expr->show_ast();
+}
+void NStatementNull::show_ast() const{
+}
+void NStatementDeclaration::show_ast()const{
+    if(this->declaration!=nullptr){
+        this->declaration->show_ast();
+    }
+}
+// declaration
+void NDeclarationWithAssign::show_ast()const{
+    this->expr->show_ast();
+}
 void NReturnStatement::show_ast() const {
   TRACE("NReturnStatement\n");
   push_depth();
@@ -72,7 +94,13 @@ void NMultiplicativeOprtUnary::show_ast() const {
 }
 // TODO
 // expression
-void NExpressionLogicalOr:: show_ast()const {
+void NExpressionAssign::show_ast() const {this->assignment->show_ast();}
+// assignment
+void NAssignLogicOr::show_ast()const{
+    this->logical_or->show_ast();
+}
+void NAssignAssign::show_ast()const{
+    this->expr->show_ast();
 }
 // logical_or
 void NLogicalOrAnd:: show_ast()const {
@@ -119,4 +147,7 @@ void NPrimaryExpression::show_ast() const {
   push_depth();
   this->exp.show_ast();
   pop_depth();
+}
+// TODO
+void NPrimaryId::show_ast()const{
 }

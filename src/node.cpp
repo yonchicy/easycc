@@ -1,7 +1,15 @@
 #include "../include/node.h"
 #include "../include/error.h"
+#include "../include/runtime.h"
 #include <cstdio>
 extern FILE *output;
+static std::string func_name;
+void store_var(const char* reg,VaribleInfo& var){
+  fprintf(output, "\tsw %s, %d(fp)\n",reg, var.offset);
+}
+void load_var(const char* reg,VaribleInfo& var){
+  fprintf(output, "\tlw %s, %d(fp)\n",reg, var.offset);
+}
 void push(const char *reg) {
   // debug("PUSH %s\n", reg);
   fprintf(output, "\taddi sp, sp, -%d\n", 4);
@@ -17,20 +25,57 @@ void pop(const char *reg) {
 void NProgram::gen() const {
   fprintf(output, "\t.text\n");
   // Emit code
+  func_name=FuncDeclaration.id;
   FuncDeclaration.gen();
 }
 
 void NFunctionDeclaration::gen() const {
+
     fprintf(output, "\t.global %s\n", id.c_str());
     fprintf(output, "%s:\n", id.c_str());
-    statement.gen(); }
+    // 
+    int local_stack_size=FunctionTable[func_name].stack_size ;
+    fprintf(output, "\taddi sp,sp, -%d\n",local_stack_size);
+    fprintf(output, "\tsw   ra,%d-4(sp)\n",local_stack_size);
+    fprintf(output, "\tsw   fp,%d-8(sp)\n",local_stack_size);
+    fprintf(output, "\taddi fp,sp,%d\n",local_stack_size);
 
-
-
+    statements->gen(); 
+    fprintf(output, ".L.f.%s:\n",func_name.c_str());
+    fprintf(output, "\tlw   ra,%d-4(sp)\n",local_stack_size);
+    fprintf(output, "\tlw   fp,%d-8(sp)\n",local_stack_size);
+    fprintf(output, "\taddi sp,sp,%d\n",local_stack_size);
+    fprintf(output, "\tret\n");
+}
+// TODO
+// statements
+void NStatements::gen()const{
+    for (auto &stmt : this->stmts) {
+        stmt->gen();
+    }
+}
+// statement
+void NStatementExpr::gen() const{
+    this->expr->gen();
+}
+void NStatementNull::gen() const{
+}
+void NStatementDeclaration::gen()const{
+    if(this->declaration!=nullptr){
+        this->declaration->gen();
+    }
+}
+// declaration
+void NDeclarationWithAssign::gen()const{
+    this->expr->gen();
+    pop("t0");
+    store_var("t0",FunctionTable[func_name].VaribleTable[this->id] );
+    push("t0");
+}
 void NReturnStatement::gen() const {
   expr.gen();
   pop("a0");
-  fprintf(output, "\tret\n");
+  fprintf(output, "\tj .L.f.%s\n",func_name.c_str());
 }
 void NInteger::gen() const {
   fprintf(output, "\tli t0, %lld\n", value);
@@ -55,7 +100,17 @@ void NAddtiveOprtMulti::gen() const {
   push("t0");
 }
 // expression
-void NExpressionLogicalOr::gen() const { this->logical_or->gen(); }
+void NExpressionAssign::gen() const {this->assignment->gen();}
+// assignment
+void NAssignLogicOr::gen()const{
+    this->logical_or->gen();
+}
+void NAssignAssign::gen()const{
+    this->expr->gen();
+    pop("t0");
+    store_var("t0",FunctionTable[func_name].VaribleTable[this->id] );
+    push("t0");
+}
 
 // logical_or
 void NLogicalOrAnd::gen() const { this->logical_and->gen(); }
@@ -162,3 +217,6 @@ void NUnaryWithOperator::gen() const {
   push("t0");
 }
 void NPrimaryExpression::gen() const { this->exp.gen(); }
+void NPrimaryId::gen()const{
+    load_var("t0", FunctionTable[func_name].VaribleTable[this->id]);
+}
