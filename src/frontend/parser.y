@@ -1,9 +1,11 @@
 %{
     #include "../../include/node.h"
+    #include "../../include/error.h"
     #include <vector>
     NProgram *programBlock;
     extern int yyline;
     extern int yylex();
+    extern bool last_statement_is_return;
     void yyerror(const char*s){printf("ERROR:Line:%d\n%s\n",yyline,s);}
     void insertVarible(std::string& type,std::string& id);
 void insertFunction(std::string& type,std::string& id);
@@ -73,10 +75,26 @@ statements
      | statements statement {$1->stmts.push_back($2);$$=$1;}
      ;
 statement
-   : TRETURN expression TSEMICOLOM {$$ = new NReturnStatement(*$2);}
-   | TSEMICOLOM {$$ = new NStatementNull();}
-   | expression TSEMICOLOM{$$ = new NStatementExpr($1);}
-   | declaration {$$= new NStatementDeclaration($1);}
+   : TRETURN expression TSEMICOLOM {
+           $$ = new NReturnStatement(*$2);
+           last_statement_is_return=true;
+           TRACE("GET return stmt\n");
+       }
+   | TSEMICOLOM {
+           $$ = new NStatementNull();
+           last_statement_is_return=false;
+           TRACE("GET stmt\n");
+       }
+   | expression TSEMICOLOM{
+           $$ = new NStatementExpr($1);
+           last_statement_is_return=false;
+           TRACE("GET stmt\n");
+       }
+   | declaration {
+           $$= new NStatementDeclaration($1);
+           last_statement_is_return=false;
+           TRACE("GET stmt\n");
+       }
 ;
 declaration
     : type TIDENTIFIER TSEMICOLOM {insertVarible($1->name,*$2);$$=nullptr;}

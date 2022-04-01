@@ -88,7 +88,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 12 "src/frontend/parser.y"
+#line 14 "src/frontend/parser.y"
 
 NStatement                *stmt;
 NStatements               *stmts;

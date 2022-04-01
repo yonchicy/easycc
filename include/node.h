@@ -4,8 +4,8 @@
 #include "runtime.h"
 #include <algorithm>
 #include <iostream>
+#include <utility>
 #include <vector>
-extern std::unordered_map<std::string, VaribleInfo> VaribleTable;
 class Node;
 class NStatements;
 class NStatement;
@@ -38,8 +38,8 @@ public:
 class NProgram : public Node {
 public:
   const NFunctionDeclaration &FuncDeclaration;
-  explicit NProgram(const NFunctionDeclaration &_FuncDeclaration)
-      : FuncDeclaration(_FuncDeclaration){};
+  explicit NProgram(const NFunctionDeclaration &FuncDeclaration)
+      : FuncDeclaration(FuncDeclaration){};
   void gen() const override;
   void show_ast() const override;
 };
@@ -50,7 +50,7 @@ public:
   const NStatements *statements;
   NFunctionDeclaration(const NType &_type, std::string _id,
                        const NStatements *_statements)
-      : type(_type), id((_id)), statements(_statements) {}
+      : type(_type), id((std::move(_id))), statements(_statements) {}
   void gen() const override;
   void show_ast() const override;
 };
@@ -346,14 +346,6 @@ public:
   const NUnary &unary;
   NUnaryWithOperator(std::string _oprt, const NUnary &_unary)
       : oprt((_oprt)), unary(_unary){};
-  void gen() const override;
-  void show_ast() const override;
-};
-
-class NIdentifier : public Node {
-public:
-  std::string name;
-  NIdentifier(const std::string _name) : name((_name)) {}
   void gen() const override;
   void show_ast() const override;
 };
