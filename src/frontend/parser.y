@@ -69,6 +69,10 @@ function
         $$=new NFunctionDeclaration(*$1,*$2,$6);
         insertFunction($1->name,*$2);
         }
+    | type TIDENTIFIER TLPAREN TRPAREN TLBPAREN  TRBPAREN {
+        $$=new NFunctionDeclaration(*$1,*$2,nullptr);
+        insertFunction($1->name,*$2);
+        }
 ;
 statements
      : statement {$$ = new NStatements(); $$->stmts.push_back($1);}

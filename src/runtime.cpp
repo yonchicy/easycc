@@ -5,7 +5,7 @@ std::unordered_map<std::string, FunctionInfo> FunctionTable;
 int scope_offset;
 int test(int argc, char *argv[]) { return 0; }
 
-int getStackOff() { return scope_offset++; }
+int getStackOff() { return 3+scope_offset++; }
 
 VaribleInfo::VaribleInfo(std::string &type)
     : type(type), offset(getStackOff()) {}

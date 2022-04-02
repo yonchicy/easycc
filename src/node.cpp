@@ -18,10 +18,10 @@ extern FILE *output;
 bool last_statement_is_return;
 static std::string func_name;
 void store_var(const char *reg, VaribleInfo &var) {
-  fprintf(output, "\tsw %s, %d(fp)\n", reg, var.offset);
+  fprintf(output, "\tsw %s, -%d(fp)\n", reg, var.offset*4);
 }
 void load_var(const char *reg, VaribleInfo &var) {
-  fprintf(output, "\tlw %s, %d(fp)\n", reg, var.offset);
+  fprintf(output, "\tlw %s, -%d(fp)\n", reg, var.offset*4);
 }
 void push(const char *reg) {
   // debug("PUSH %s\n", reg);
@@ -54,14 +54,16 @@ void NFunctionDeclaration::gen() const {
   fprintf(output, "\tsw   fp,%d-8(sp)\n", local_stack_size);
   fprintf(output, "\taddi fp,sp,%d\n", local_stack_size);
 
-  statements->gen();
+  if(statements!=nullptr){
+      statements->gen();
+  }
   auto last_statement=--(this->statements->stmts.end());
   if(!last_statement_is_return){
-  fprintf(output, "\tlw a0,0\n");
+  fprintf(output, "\tli a0,0\n");
 
   }
   fprintf(output, ".L.f.%s:\n", func_name.c_str());
-  fprintf(output, "\taddi sp,fp\n");
+  fprintf(output, "\taddi sp,fp,0\n");
   fprintf(output, "\tlw   ra,-4(sp)\n");
   fprintf(output, "\tlw   fp,-8(sp)\n");
   fprintf(output, "\tret\n");
@@ -279,4 +281,5 @@ void NPrimaryExpression::gen() const {
 void NPrimaryId::gen() const {
   WARNNING("NPrimaryId\n");
   load_var("t0", FunctionTable[func_name].VaribleTable[this->id]);
+  push("t0");
 }

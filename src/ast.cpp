@@ -22,7 +22,9 @@ void NFunctionDeclaration::show_ast() const {
   TRACE("FuncDeclaration(%s %s) stataments:\n", (this->type).name.c_str(),
         (this->id.c_str()));
   push_depth();
-  this->statements->show_ast();
+  if (this->statements != nullptr) {
+    this->statements->show_ast();
+  }
   pop_depth();
 }
 
@@ -54,10 +56,10 @@ void NStatementDeclaration::show_ast() const {
 }
 // declaration
 void NDeclarationWithAssign::show_ast() const {
-    TRACE("Varible declaration with init\n");
-    push_depth();
-    this->expr->show_ast(); 
-    pop_depth();
+  TRACE("Varible declaration with init\n");
+  push_depth();
+  this->expr->show_ast();
+  pop_depth();
 }
 void NReturnStatement::show_ast() const {
   TRACE("NReturnStatement\n");
@@ -102,93 +104,87 @@ void NMultiplicativeOprtUnary::show_ast() const {
 // TODO
 // expression
 void NExpressionAssign::show_ast() const {
-    TRACE("NExpressionAssign\n");
-    push_depth();
-    this->assignment->show_ast(); 
-    pop_depth();
+  TRACE("NExpressionAssign\n");
+  push_depth();
+  this->assignment->show_ast();
+  pop_depth();
 }
 // assignment
 void NAssignLogicOr::show_ast() const {
-    TRACE("NAssignLogicOr\n");
-    push_depth();
-    this->logical_or->show_ast(); 
-    pop_depth();
+  TRACE("NAssignLogicOr\n");
+  push_depth();
+  this->logical_or->show_ast();
+  pop_depth();
 }
-void NAssignAssign::show_ast() const { 
-    TRACE("NAssignAssign (%s=something)\n",this->id.c_str());
-    push_depth();
-    this->expr->show_ast(); 
-    pop_depth();
+void NAssignAssign::show_ast() const {
+  TRACE("NAssignAssign (%s=something)\n", this->id.c_str());
+  push_depth();
+  this->expr->show_ast();
+  pop_depth();
 }
 // logical_or
 void NLogicalOrAnd::show_ast() const {
-    TRACE("NLogicalOrAnd\n");
-    push_depth();
-    this->logical_and->show_ast();
-    pop_depth();
+  TRACE("NLogicalOrAnd\n");
+  push_depth();
+  this->logical_and->show_ast();
+  pop_depth();
 }
 void NLogicalORBinary::show_ast() const {
-    TRACE("NLogicalORBinary\n");
-    push_depth();
-    this->l->show_ast();
-    pop_depth();
-    push_depth();
-    this->r->show_ast();
-    pop_depth();
+  TRACE("NLogicalORBinary\n");
+  push_depth();
+  this->l->show_ast();
+  pop_depth();
+  push_depth();
+  this->r->show_ast();
+  pop_depth();
 }
 // logical_and
 void NLogicalAndEquality::show_ast() const {
-    TRACE("NLogicalAndEquality\n");
-    push_depth();
-    this->equality->show_ast();
-    pop_depth();
-
+  TRACE("NLogicalAndEquality\n");
+  push_depth();
+  this->equality->show_ast();
+  pop_depth();
 }
 void NLogicalAndBinary::show_ast() const {
-    TRACE("NLogicalAndBinary\n");
-    push_depth();
-    this->l->show_ast();
-    pop_depth();
-    push_depth();
-    this->r->show_ast();
-    pop_depth();
-
-
+  TRACE("NLogicalAndBinary\n");
+  push_depth();
+  this->l->show_ast();
+  pop_depth();
+  push_depth();
+  this->r->show_ast();
+  pop_depth();
 }
 // equality
 void NEqualityRelational::show_ast() const {
-    TRACE("NEqualityRelational\n");
-    push_depth();
-    this->relational->show_ast();
-    pop_depth();
-
+  TRACE("NEqualityRelational\n");
+  push_depth();
+  this->relational->show_ast();
+  pop_depth();
 }
 void NEqualityBinary::show_ast() const {
-    TRACE("NEqualityBinary (%s)\n",this->_oprt.c_str());
-    push_depth();
-    this->l->show_ast();
-    pop_depth();
-    push_depth();
-    this->r->show_ast();
-    pop_depth();
-
+  TRACE("NEqualityBinary (%s)\n", this->_oprt.c_str());
+  push_depth();
+  this->l->show_ast();
+  pop_depth();
+  push_depth();
+  this->r->show_ast();
+  pop_depth();
 }
 // relational
 void NRelationalAdditive::show_ast() const {
-    TRACE("NRelationalAdditive\n");
-    push_depth();
-    this->additive->show_ast();
-    pop_depth();
+  TRACE("NRelationalAdditive\n");
+  push_depth();
+  this->additive->show_ast();
+  pop_depth();
 }
 void NRelationalBinary::show_ast() const {
-    TRACE("NRelationalBinary (%s)\n",this->_oprt.c_str());
-    push_depth();
-    this->l->show_ast();
-    pop_depth();
-    push_depth();
-    this->r->show_ast();
-    pop_depth();
-
+  TRACE("NRelationalBinary (%s)\n", this->_oprt.c_str());
+  push_depth();
+  this->l->show_ast();
+  pop_depth();
+  push_depth();
+  this->r->show_ast();
+  pop_depth();
 }
 void NUnaryPrimary::show_ast() const {
   TRACE("NUnaryPrimary\n");
@@ -210,5 +206,5 @@ void NPrimaryExpression::show_ast() const {
 }
 // TODO
 void NPrimaryId::show_ast() const {
-    TRACE("NPrimaryId (%s)\n",this->id.c_str());
+  TRACE("NPrimaryId (%s)\n", this->id.c_str());
 }
