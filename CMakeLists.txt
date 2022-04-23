@@ -34,7 +34,8 @@ ENDIF()
 file(GLOB_RECURSE source_files ${CMAKE_SOURCE_DIR} "src/*.cpp")
 
 message("source is ${source_files}")
-include_directories(include)
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
 
 add_executable(${PROJECT_NAME} ${source_files} ${BISONOUTPUT} ${FLEXOUTPUT})
 
