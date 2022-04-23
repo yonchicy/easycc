@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_SRC_FRONTEND_PARSER_HPP_INCLUDED
-# define YY_YY_SRC_FRONTEND_PARSER_HPP_INCLUDED
+#ifndef YY_YY_HOME_YONCHICY_COMPILER_EASYCC_INCLUDE_FRONTEND_PARSER_H_INCLUDED
+# define YY_YY_HOME_YONCHICY_COMPILER_EASYCC_INCLUDE_FRONTEND_PARSER_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -88,7 +88,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 14 "src/frontend/parser.y"
+#line 14 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
 
 NStatement                *stmt;
 NStatements               *stmts;
@@ -110,7 +110,7 @@ NProgram                  *program;
 NDeclaration              *declaration;
 int                       token;
 
-#line 114 "src/frontend/parser.hpp"
+#line 114 "/home/yonchicy/compiler/easycc/include/frontend/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -125,4 +125,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_SRC_FRONTEND_PARSER_HPP_INCLUDED  */
+#endif /* !YY_YY_HOME_YONCHICY_COMPILER_EASYCC_INCLUDE_FRONTEND_PARSER_H_INCLUDED  */

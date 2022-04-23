@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 1 "src/frontend/parser.y"
+#line 1 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
 
     #include "../../include/node.h"
     #include "../../include/error.h"
@@ -80,7 +80,7 @@
     void insertVarible(std::string& type,std::string& id);
 void insertFunction(std::string& type,std::string& id);
 
-#line 84 "src/frontend/parser.cpp"
+#line 84 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -103,7 +103,7 @@ void insertFunction(std::string& type,std::string& id);
 #  endif
 # endif
 
-#include "parser.hpp"
+#include "parser.h"
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -1156,296 +1156,296 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: function  */
-#line 65 "src/frontend/parser.y"
+#line 65 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                {programBlock = new NProgram(*(yyvsp[0].func_decl));}
-#line 1162 "src/frontend/parser.cpp"
+#line 1162 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 3: /* function: type TIDENTIFIER TLPAREN TRPAREN TLBPAREN statements TRBPAREN  */
-#line 68 "src/frontend/parser.y"
+#line 68 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                                                                     {
         (yyval.func_decl)=new NFunctionDeclaration(*(yyvsp[-6].type),*(yyvsp[-5].string),(yyvsp[-1].stmts));
         insertFunction((yyvsp[-6].type)->name,*(yyvsp[-5].string));
         }
-#line 1171 "src/frontend/parser.cpp"
+#line 1171 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 4: /* function: type TIDENTIFIER TLPAREN TRPAREN TLBPAREN TRBPAREN  */
-#line 72 "src/frontend/parser.y"
+#line 72 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                                                           {
         (yyval.func_decl)=new NFunctionDeclaration(*(yyvsp[-5].type),*(yyvsp[-4].string),nullptr);
         insertFunction((yyvsp[-5].type)->name,*(yyvsp[-4].string));
         }
-#line 1180 "src/frontend/parser.cpp"
+#line 1180 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 5: /* statements: statement  */
-#line 78 "src/frontend/parser.y"
+#line 78 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                  {(yyval.stmts) = new NStatements(); (yyval.stmts)->stmts.push_back((yyvsp[0].stmt));}
-#line 1186 "src/frontend/parser.cpp"
+#line 1186 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 6: /* statements: statements statement  */
-#line 79 "src/frontend/parser.y"
+#line 79 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                             {(yyvsp[-1].stmts)->stmts.push_back((yyvsp[0].stmt));(yyval.stmts)=(yyvsp[-1].stmts);}
-#line 1192 "src/frontend/parser.cpp"
+#line 1192 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 7: /* statement: TRETURN expression TSEMICOLOM  */
-#line 82 "src/frontend/parser.y"
+#line 82 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                                    {
            (yyval.stmt) = new NReturnStatement(*(yyvsp[-1].expr));
            last_statement_is_return=true;
            TRACE("GET return stmt\n");
        }
-#line 1202 "src/frontend/parser.cpp"
+#line 1202 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 8: /* statement: TSEMICOLOM  */
-#line 87 "src/frontend/parser.y"
+#line 87 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                 {
            (yyval.stmt) = new NStatementNull();
            last_statement_is_return=false;
            TRACE("GET stmt\n");
        }
-#line 1212 "src/frontend/parser.cpp"
+#line 1212 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 9: /* statement: expression TSEMICOLOM  */
-#line 92 "src/frontend/parser.y"
+#line 92 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                           {
            (yyval.stmt) = new NStatementExpr((yyvsp[-1].expr));
            last_statement_is_return=false;
            TRACE("GET stmt\n");
        }
-#line 1222 "src/frontend/parser.cpp"
+#line 1222 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 10: /* statement: declaration  */
-#line 97 "src/frontend/parser.y"
+#line 97 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                  {
            (yyval.stmt)= new NStatementDeclaration((yyvsp[0].declaration));
            last_statement_is_return=false;
            TRACE("GET stmt\n");
        }
-#line 1232 "src/frontend/parser.cpp"
+#line 1232 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 11: /* declaration: type TIDENTIFIER TSEMICOLOM  */
-#line 104 "src/frontend/parser.y"
+#line 104 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                                   {insertVarible((yyvsp[-2].type)->name,*(yyvsp[-1].string));(yyval.declaration)=nullptr;}
-#line 1238 "src/frontend/parser.cpp"
+#line 1238 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 12: /* declaration: type TIDENTIFIER TASSIGN expression TSEMICOLOM  */
-#line 105 "src/frontend/parser.y"
+#line 105 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                                                      {
         insertVarible((yyvsp[-4].type)->name,*(yyvsp[-3].string));
         (yyval.declaration) = new NDeclarationWithAssign(*(yyvsp[-3].string),(yyvsp[-1].expr));
     }
-#line 1247 "src/frontend/parser.cpp"
+#line 1247 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 13: /* type: TINT  */
-#line 112 "src/frontend/parser.y"
+#line 112 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
            {(yyval.type)=new NType(std::string("int"));}
-#line 1253 "src/frontend/parser.cpp"
+#line 1253 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 14: /* expression: assignment  */
-#line 116 "src/frontend/parser.y"
+#line 116 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                 {(yyval.expr) = new  NExpressionAssign((yyvsp[0].assignment));}
-#line 1259 "src/frontend/parser.cpp"
+#line 1259 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 15: /* assignment: logical_or  */
-#line 119 "src/frontend/parser.y"
+#line 119 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                  {(yyval.assignment)=new NAssignLogicOr((yyvsp[0].logical_or));}
-#line 1265 "src/frontend/parser.cpp"
+#line 1265 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 16: /* assignment: TIDENTIFIER TASSIGN expression  */
-#line 120 "src/frontend/parser.y"
+#line 120 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                                      {(yyval.assignment)=new NAssignAssign(*(yyvsp[-2].string),(yyvsp[0].expr));}
-#line 1271 "src/frontend/parser.cpp"
+#line 1271 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 17: /* logical_or: logical_and  */
-#line 124 "src/frontend/parser.y"
+#line 124 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                  {(yyval.logical_or)=new NLogicalOrAnd((yyvsp[0].logical_and));}
-#line 1277 "src/frontend/parser.cpp"
+#line 1277 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 18: /* logical_or: logical_or TLOGOR logical_and  */
-#line 125 "src/frontend/parser.y"
+#line 125 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                                     {(yyval.logical_or)=new NLogicalORBinary((yyvsp[-2].logical_or),(yyvsp[0].logical_and));}
-#line 1283 "src/frontend/parser.cpp"
+#line 1283 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 19: /* logical_and: equality  */
-#line 130 "src/frontend/parser.y"
+#line 130 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                {(yyval.logical_and)=new NLogicalAndEquality((yyvsp[0].equality));}
-#line 1289 "src/frontend/parser.cpp"
+#line 1289 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 20: /* logical_and: logical_and TLOGAND equality  */
-#line 131 "src/frontend/parser.y"
+#line 131 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                                   {(yyval.logical_and)=new NLogicalAndBinary((yyvsp[-2].logical_and),(yyvsp[0].equality));}
-#line 1295 "src/frontend/parser.cpp"
+#line 1295 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 21: /* equality: relational  */
-#line 134 "src/frontend/parser.y"
+#line 134 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                  {(yyval.equality)=new NEqualityRelational((yyvsp[0].relational));}
-#line 1301 "src/frontend/parser.cpp"
+#line 1301 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 22: /* equality: equality TE relational  */
-#line 135 "src/frontend/parser.y"
+#line 135 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                             {(yyval.equality)=new NEqualityBinary((yyvsp[-2].equality),std::string("=="),(yyvsp[0].relational));}
-#line 1307 "src/frontend/parser.cpp"
+#line 1307 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 23: /* equality: equality TNE relational  */
-#line 136 "src/frontend/parser.y"
+#line 136 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                               {(yyval.equality)=new NEqualityBinary((yyvsp[-2].equality),std::string("!="),(yyvsp[0].relational));}
-#line 1313 "src/frontend/parser.cpp"
+#line 1313 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 24: /* relational: additive  */
-#line 139 "src/frontend/parser.y"
+#line 139 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
               {(yyval.relational) = new NRelationalAdditive((yyvsp[0].additive));}
-#line 1319 "src/frontend/parser.cpp"
+#line 1319 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 25: /* relational: relational TL additive  */
-#line 140 "src/frontend/parser.y"
+#line 140 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                             {(yyval.relational) = new NRelationalBinary((yyvsp[-2].relational),std::string("<"),(yyvsp[0].additive));}
-#line 1325 "src/frontend/parser.cpp"
+#line 1325 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 26: /* relational: relational TLE additive  */
-#line 141 "src/frontend/parser.y"
+#line 141 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                              {(yyval.relational) = new NRelationalBinary((yyvsp[-2].relational),std::string("<="),(yyvsp[0].additive));}
-#line 1331 "src/frontend/parser.cpp"
+#line 1331 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 27: /* relational: relational TG additive  */
-#line 142 "src/frontend/parser.y"
+#line 142 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                             {(yyval.relational) = new NRelationalBinary((yyvsp[-2].relational),std::string(">"),(yyvsp[0].additive));}
-#line 1337 "src/frontend/parser.cpp"
+#line 1337 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 28: /* relational: relational TGE additive  */
-#line 143 "src/frontend/parser.y"
+#line 143 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                              {(yyval.relational) = new NRelationalBinary((yyvsp[-2].relational),std::string(">="),(yyvsp[0].additive));}
-#line 1343 "src/frontend/parser.cpp"
+#line 1343 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 29: /* additive: multiplicative  */
-#line 147 "src/frontend/parser.y"
+#line 147 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                      {(yyval.additive) = new NAdditiveMultipicative(*(yyvsp[0].multiplicative));}
-#line 1349 "src/frontend/parser.cpp"
+#line 1349 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 30: /* additive: additive TPLUS multiplicative  */
-#line 149 "src/frontend/parser.y"
+#line 149 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
         {(yyval.additive)=new NAddtiveOprtMulti(
             *(yyvsp[-2].additive),
             std::string("+"),
             (yyvsp[0].multiplicative));}
-#line 1358 "src/frontend/parser.cpp"
+#line 1358 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 31: /* additive: additive TMINUS multiplicative  */
-#line 154 "src/frontend/parser.y"
+#line 154 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
         {(yyval.additive)=new NAddtiveOprtMulti(
             *(yyvsp[-2].additive),
             std::string("-"),
             (yyvsp[0].multiplicative));}
-#line 1367 "src/frontend/parser.cpp"
+#line 1367 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 32: /* multiplicative: unary  */
-#line 160 "src/frontend/parser.y"
+#line 160 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
            {(yyval.multiplicative)=new NMultiplicativeUnary(*(yyvsp[0].unary));}
-#line 1373 "src/frontend/parser.cpp"
+#line 1373 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 33: /* multiplicative: multiplicative TMULTI unary  */
-#line 162 "src/frontend/parser.y"
+#line 162 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
         {(yyval.multiplicative)=new NMultiplicativeOprtUnary(
                 *(yyvsp[-2].multiplicative),
                 std::string("*"),
                 *(yyvsp[0].unary)
         );}
-#line 1383 "src/frontend/parser.cpp"
+#line 1383 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 34: /* multiplicative: multiplicative TDIV unary  */
-#line 168 "src/frontend/parser.y"
+#line 168 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
         {(yyval.multiplicative)=new NMultiplicativeOprtUnary(
                 *(yyvsp[-2].multiplicative),
                 std::string("/"),
                 *(yyvsp[0].unary)
         );}
-#line 1393 "src/frontend/parser.cpp"
+#line 1393 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 35: /* multiplicative: multiplicative TMOD unary  */
-#line 174 "src/frontend/parser.y"
+#line 174 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
         {(yyval.multiplicative)=new NMultiplicativeOprtUnary(
                 *(yyvsp[-2].multiplicative),
                 std::string("%"),
                 *(yyvsp[0].unary)
         );}
-#line 1403 "src/frontend/parser.cpp"
+#line 1403 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 36: /* unary: primary  */
-#line 181 "src/frontend/parser.y"
+#line 181 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
              {(yyval.unary)=new NUnaryPrimary(*(yyvsp[0].primary));}
-#line 1409 "src/frontend/parser.cpp"
+#line 1409 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 37: /* unary: TMINUS unary  */
-#line 182 "src/frontend/parser.y"
+#line 182 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                    {(yyval.unary) = new NUnaryWithOperator(std::string("-"),*(yyvsp[0].unary));}
-#line 1415 "src/frontend/parser.cpp"
+#line 1415 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 38: /* unary: TNOT unary  */
-#line 183 "src/frontend/parser.y"
+#line 183 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                  {(yyval.unary) = new NUnaryWithOperator(std::string("!"),*(yyvsp[0].unary));}
-#line 1421 "src/frontend/parser.cpp"
+#line 1421 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 39: /* unary: TWAVE unary  */
-#line 184 "src/frontend/parser.y"
+#line 184 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                   {(yyval.unary) = new NUnaryWithOperator(std::string("~"),*(yyvsp[0].unary));}
-#line 1427 "src/frontend/parser.cpp"
+#line 1427 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 40: /* primary: TINTEGER  */
-#line 188 "src/frontend/parser.y"
+#line 188 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                {(yyval.primary)=new NInteger(atoi((yyvsp[0].string)->c_str()));delete (yyvsp[0].string);}
-#line 1433 "src/frontend/parser.cpp"
+#line 1433 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 41: /* primary: TLPAREN expression TRPAREN  */
-#line 189 "src/frontend/parser.y"
+#line 189 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                                  {(yyval.primary) = new NPrimaryExpression(*(yyvsp[-1].expr));}
-#line 1439 "src/frontend/parser.cpp"
+#line 1439 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
   case 42: /* primary: TIDENTIFIER  */
-#line 190 "src/frontend/parser.y"
+#line 190 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
                   {(yyval.primary) = new NPrimaryId(*(yyvsp[0].string));}
-#line 1445 "src/frontend/parser.cpp"
+#line 1445 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
     break;
 
 
-#line 1449 "src/frontend/parser.cpp"
+#line 1449 "/home/yonchicy/compiler/easycc/src/frontend/parser.cpp"
 
       default: break;
     }
@@ -1638,7 +1638,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 192 "src/frontend/parser.y"
+#line 192 "/home/yonchicy/compiler/easycc/src/frontend/parser.y"
 
 void insertVarible(std::string& type,std::string& id){
     VaribleTable.insert(std::make_pair<std::string, VaribleInfo>(std::string(id),VaribleInfo(type)));
